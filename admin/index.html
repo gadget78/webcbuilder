@@ -1,0 +1,3595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evernode WebCluster Builder</title>
+  <style>
+   :root {
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --gray-light: #f3f4f6;
+  --gray: #e5e7eb;
+  --gray-dark: #6b7280;
+  --text: #111827;
+  --bg: #f9fafb;
+  --danger: #dc2626;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  margin: 0;
+  padding: 2rem;
+  color: var(--text);
+}
+body.dark {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --gray-light: #1f2937;
+  --gray: #374151;
+  --gray-dark: #d1d5db;
+  --text: #f9fafb;
+  --bg: #111827;
+  --danger: #f87171;
+  background-color: var(--bg);
+  color: var(--text);
+}
+body.dark #hpinfoForm input[type="text"],
+body.dark #hpinfoForm input[type="number"] {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  border-color: var(--gray);
+}
+body.dark #infoPopup,
+body.dark #usersTab,
+body.dark #managerInfoPopup,
+body.dark #clusterInfoPopup,
+body.dark #clusterSettingsInfoPopup,
+body.dark #sidedishInfoPopup,
+body.dark #apiInfoPopup,
+body.dark #privatevariablesInfoPopup,
+body.dark #nodejsInfoPopup,
+body.dark #clusterOpsInfoPopup,
+body.dark #morefunctionsInfoPopup {color:#000!important;}
+body.dark #morefunctionsTab h1 {color:#000!important;}
+body.dark .nodejsTab
+body.dark #uploadfuncsdiv h2 {color:#000!important;}
+body.dark #funcversions h2 {color:#000!important;}
+body.dark .rendered-html p, body.dark .rendered-html {color:#000;}
+body.dark #clusterTree li span {color:#FFF!important;}
+body.dark pre#hpLog,
+body.dark pre#fileContent,
+body.dark pre#response,
+body.dark pre#nodeStdout,
+body.dark pre#nodeStderr,
+body.dark pre#stdoutLog,
+body.dark pre#stderrLog {
+  color: black !important;
+  background: #f3f4f6 !important; /* Optional: light background for readability */
+}
+body.dark .tab-nav button.active {
+  background-color: black !important;
+  color: white !important;
+}
+
+body.dark .card,
+body.dark .section,
+body.dark .popup-content,
+body.dark .dropzone,
+body.dark input,
+body.dark textarea,
+body.dark select,
+body.dark .file-item,
+body.dark .tab-nav button {
+  background: #1f2937;
+  color: var(--text);
+  border-color: var(--gray);
+}
+
+body.dark input:read-only,
+body.dark textarea:fullscreen {
+  background: #374151;
+}
+
+body.dark .highlight-layer {
+  background: #1f2937;
+  color: var(--text);
+}
+
+body.dark .slider {
+  background-color: #4b5563;
+}
+
+body.dark .popup-content button {
+  background-color: #4f46e5;
+}
+
+body.dark .popup-content button:hover {
+  background-color: #6366f1;
+}
+
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+h1, h2, h3 {
+  margin-bottom: 1rem;
+}
+
+input, button, textarea, select {
+  font-size: 1rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--gray);
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+input:read-only {
+  background: #f0f0f0;
+}
+textarea:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  font-size: 16px;
+  border: none;
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: var(--primary-light);
+}
+.confirm-delete {
+  background-color: green;
+  color: white;
+}
+
+.tab-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  flex-direction: row; 
+}
+
+@media (max-width: 768px) {
+  .tab-nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.tab-nav button {
+  background: var(--gray);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .tab-nav button {
+    width: 100%;
+  }
+}
+
+.tab-nav button.active {
+  background: var(--primary);
+  color: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.section {
+  background: var(--gray-light);
+  border: 1px solid var(--gray);
+  padding: 1rem;
+  border-radius: 0.75rem;
+}
+
+.tree ul {
+  list-style: none;
+  padding-left: 1rem;
+  margin-left: 0.5rem;
+  border-left: 1px solid #ddd;
+}
+
+.tree li {
+  margin: 0.5rem 0;
+}
+
+.tree span {
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  display: inline-block;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: 1px solid var(--gray);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.file-item button {
+  background: var(--danger);
+  margin-left: 0.5rem;
+}
+
+.dropzone {
+  border: 2px dashed var(--primary);
+  color: var(--primary);
+  padding: 2rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.dropzone:hover {
+  background: #eef2ff;
+}
+
+.switch-block {
+  margin-top: 1.5rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 28px;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  background: white;
+  left: 4px;
+  top: 4px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.switch inputhecked + .slider {
+  background: var(--primary);
+}
+
+.switch inputhecked + .slider:before {
+  transform: translateX(22px);
+}
+
+.message {
+  margin-top: 1rem;
+  font-weight: 500;
+  color: green;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #ecfdf5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+.filemessage {
+  margin-top: 1rem;
+  font-weight: 500;
+  color: green;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #ecfdf5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+pre {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+
+.popup-overlay {
+ position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.popup-overlay.active {
+opacity: 1;
+visibility: visible;
+}
+
+.popup-content {
+background: #fff;
+
+max-width: 800px;
+width: 90%;
+padding: 20px;
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+transform: scale(0.7);
+transition: transform 0.3s ease;
+max-height: 80vh;
+overflow-y: auto;
+}
+
+.popup-overlay.active .popup-content {
+transform: scale(1);
+}
+
+.popup-content h2 {
+margin: 0 0 15px;
+font-size: 24px;
+color: #333;
+text-align: center;
+font-weight: bold;
+}
+
+.popup-content .terms {
+font-size: 14px;
+color: #555;
+line-height: 1.6;
+margin-bottom: 20px;
+}
+.popup-content button {
+display: block;
+width: 100%;
+padding: 12px;
+background: #000;
+color: #fff;
+border: none;
+border-radius: 8px; 
+font-size: 16px;
+cursor: pointer;
+transition: background 0.3s ease, transform 0.2s ease;
+}
+.card-content:focus {
+  outline: 2px dashed #007bff;
+  background-color: #f9f9f9;
+}
+
+.popup-content button:hover {
+background: #333; 
+transform: translateY(-2px);
+}
+
+.popup-content button:active {
+transform: translateY(0);
+}
+
+.popup-content::-webkit-scrollbar {
+width: 8px;
+}
+
+.popup-content::-webkit-scrollbar-track {
+background: #f1f1f1;
+}
+
+.popup-content::-webkit-scrollbar-thumb {
+background: #000;
+border-radius: 4px;
+}
+
+#morefunctionsTab .card {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 1rem;
+}
+
+.card-content:focus {
+  outline: 2px dashed #007bff;
+  background-color: #f9f9f9;
+}
+#morefunctionsTab .card button {
+  margin-top: 8px;
+}
+
+.editor-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.highlight-layer,
+#editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.highlight-layer {
+  color: black;
+  background: white;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#editor {
+  background: transparent;
+  color: transparent;
+  caret-color: black;
+  z-index: 1;
+  border: none; /* important */
+  resize: none;
+}
+
+
+  .tag { color: #d73a49; }
+  .attr { color: #6f42c1; }
+  .string { color: #032f62; }
+  </style>
+   <script src="hotpocket-js-client.min.js"></script>
+</head>
+<body>
+
+
+    <div class="popup-overlay" id="termsPopup">
+        <div class="popup-content">
+            <h2>Terms and Conditions</h2>
+            <div class="terms">
+Terms and Conditions and Legal Disclaimer for Everwebhost Software
+Effective Date: May 13, 2025
+Welcome to Everwebhost, a software project built with Evernode Hotpocket Technology. We’re excited to share this open-source software with you! By using, copying, modifying, or sharing Everwebhost ("Software"), you agree to these Terms and Conditions and the Legal Disclaimer below. They’re designed to keep things simple, protect everyone involved, and make sure you feel confident using the Software.
+1. You’re Free to Use the Software
+Open-Source Freedom: Everwebhost is released under a permissive open-source license (see the COPYING file included with the Software). This means you can use, copy, modify, share, or even sell the Software for any purpose—personal, commercial, or otherwise.
+
+Fork and Create: Feel free to fork the project, build something new, or integrate it into your own work. There are no restrictions on what you can do, as long as you follow the license terms in the COPYING file.
+
+Safe to Use: We’ve made the Software open and accessible so you can trust it’s yours to explore and build with. The community is welcome to contribute and make it even better!
+
+2. We’re Not Responsible for How You Use It
+Your Responsibility: You’re in charge of how you use the Software. Whether you’re running it on a server, building a business, or just experimenting, you’re responsible for the results. This includes making sure it works for your needs and complies with any laws or regulations.
+
+No Liability: The author(s) of Everwebhost (that’s us) aren’t responsible for anything that happens when you use the Software. This includes any issues, losses, or problems—technical, legal, or otherwise. You’re using it at your own risk, but we’ve made it open so you can verify and customize it to feel secure.
+
+Feel Confident: We’re not liable because we trust you to use the Software responsibly. You have full control to test, modify, and secure it to meet your needs, which makes it a safe choice for your projects.
+
+3. No Promises, Just Possibilities
+As-Is Software: The Software comes "AS IS," with no guarantees. We don’t promise it’s perfect, bug-free, or ideal for every situation. But that’s the beauty of open-source—you can check it out, fix what you need, and make it your own.
+
+No Support Required: We don’t have to provide updates, fixes, or support, but we hope the community (including you!) will keep the project alive and thriving.
+
+Why This Matters: By not making promises, we keep the Software free and open for everyone. You’re empowered to make it work for you, which is why so many developers love open-source projects like this.
+
+4. You’re in Control
+Check It Yourself: You’re responsible for testing the Software to ensure it’s safe and suitable for your needs. Open-source means you can see every line of code, so you can trust what you’re using.
+
+Third-Party Components: Everwebhost uses Evernode Hotpocket Technology and may include other third-party tools, which have their own licenses. You’ll need to check those terms (usually included with the Software) to make sure you’re compliant. We’ve made sure everything is standard and easy to follow.
+
+Stay Legal: Make sure your use of the Software follows all relevant laws (like data privacy or intellectual property rules). This is on you, but it’s standard for any software project and nothing to worry about if you’re diligent.
+
+5. Our Rights
+We Own the Original: The Software is licensed, not sold. We (the authors) keep the intellectual property rights, but you get to use it freely under the COPYING license.
+
+Give Credit: If you share or modify the Software, please include the copyright notice and license terms from the COPYING file. It’s a small way to keep the project open and fair for everyone.
+
+6. If Something Goes Wrong
+Stopping Use: If you don’t follow these terms or the COPYING license, your right to use the Software ends automatically. But we’re all about keeping things open, so just stick to the rules, and you’re good!
+
+Disputes: If there’s ever a disagreement about these terms, we’ll handle it through arbitration in San Francisco, California, under the rules of the American Arbitration Association. This is a fair and standard way to resolve issues.
+
+Laws: These terms follow the laws of California, USA. It’s a common choice for software projects and keeps things clear.
+
+7. Keeping Things Flexible
+Updates to Terms: We might update these terms in the future. If we do, we’ll make the new version available with the Software. Keep using it, and you’re agreeing to the updates.
+
+If Something’s Off: If any part of these terms isn’t valid under the law, the rest still applies. This keeps everything fair and functional.
+
+No Surprises: These terms, along with the COPYING file, are the full deal. No hidden rules or surprises.
+
+Legal Disclaimer
+We’re Not Liable: We, the authors, aren’t responsible for any problems, damages, or losses from using Everwebhost. Whether it’s a technical glitch, a legal issue, or something else, you’re responsible for your use of the Software. This is standard for open-source projects and helps keep the Software free for everyone.
+No Guarantees: The Software has no warranties—none at all. We don’t promise it’s flawless or fits every need. But you can inspect and tweak it, which makes it a trustworthy choice for developers.
+You’re Covered: You’re responsible for making sure the Software is secure and legal for your use. This includes checking Evernode Hotpocket Technology or other components. It’s easy to do, and we’ve kept everything transparent to help you feel safe.
+Protecting Us: If someone makes a claim against us because of how you used the Software, you agree to cover us (this is called indemnification). It’s a standard way to ensure we’re not dragged into issues we didn’t cause.
+Why You’re Safe: Open-source software like Everwebhost is used by millions because it’s transparent and flexible. You can verify the code, customize it, and join a community of users. We’ve designed these terms to protect you by giving you control and clarity.
+
+
+            </div>
+            <button onclick="acceptTerms()">Accept</button>
+        </div>
+    </div>
+
+
+  <div class="wrapper">
+  <div class="tab-nav">
+    <button class="active" data-tab="loginTab" onclick="showTab('loginTab')">Login</button>
+    <button data-tab="usersTab" onclick="showTab('usersTab');">User Management</button>
+    <button data-tab="managerTab" onclick="showTab('managerTab'); loadFolders();">File Manager</button>
+    <button data-tab="clusterTab" onclick="showTab('clusterTab')">Cluster Files</button>
+    <button data-tab="clustersettingsTab" onclick="showTab('clustersettingsTab'); loadHPInfo();">Cluster Settings</button>
+    <button data-tab="sidedishTab" onclick="showTab('sidedishTab');">Side Dish</button>
+    <button data-tab="apiTab" onclick="showTab('apiTab'); refreshNodeEndpoints(); loadApiModeAndRefresh();">API Endpoints</button>
+    <button data-tab="privatevariablesTab" onclick="showTab('privatevariablesTab');">Instance Variables</button>
+    <button data-tab="nodejsTab" onclick="showTab('nodejsTab'); setTimeout(() => { fetchAvailableModules(); fetchExtraModules(); }, 100);">Node JS</button>    
+    <button data-tab="clusteroperationsTab" onclick="showTab('clusteroperationsTab');">Cluster Logs</button>
+    <button data-tab="morefunctionsTab" onclick="showTab('morefunctionsTab'); loadMoreFunctions(); ">More Functions</button>
+<div id="darkModeToggleWrapper" style="position: fixed; top: 1rem; right: 1rem; z-index: 2000; display: flex; align-items: center; gap: 0.5rem;">
+  <span id="themeIcon" style="font-size: 1.25rem;">🌞</span>
+  <label class="switch">
+    <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" />
+    <span class="slider"></span>
+  </label>
+
+</div>
+
+  </div>
+
+<div id="morefunctionsTab" style="display: none; position: relative;">
+<div class="card" style="position: relative;">
+  <h1 style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <span>More Functions</span>
+    <span style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+      <span>Use Cluster File</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleClusterMoreFunctions" onchange="toggleClusterMoreFunctions()" />
+        <span class="slider"></span>
+      </label>
+    </span>
+  </h1>
+
+  <div class="message" id="clusterMoreStatus" style="font-size: 0.85rem; color: #777;"></div>
+</div>
+
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('morefunctionsInfoPopup').style.display = 
+       (document.getElementById('morefunctionsInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+
+
+  <div id="morefunctionsInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>More Functions:</strong><br>
+    - These are custom HTML cards rendered into the page.<br>
+    - Use them to add admin UI, buttons, logs, or anything you want.<br>
+    - HTML is live — forms, inputs, and scripts work instantly.<br>
+    - Edit and save content to make permanent changes.
+  </div>
+
+
+  <div class="card" style="padding-top:24px;">
+    <div id="cards-area" style="padding-top:24px;"></div>
+    <button onclick="addCard()" style="margin-top: 1rem;" id="addMoreCardBtn">Add Card</button>
+  </div>
+<div id="uploadfuncsdiv" class="card" style="margin-top: 24px;">
+  <h2>Upload functions to Cluster</h2>
+  <button onclick="uploadMoreFunctionsJson()">Upload functions to cluster</button>
+  <div class="message" id="moreuploadlog"></div>
+</div>
+<div id="funcversions" class="card" style="margin-top: 24px;">
+  <h2>Function Versions</h2>
+  <button onclick="checkMoreFunctionVersions()">Check Versions</button>
+  <div id="moreVersionList" style="margin-top: 1rem;"></div>
+</div>
+
+</div>
+
+
+<div id="apiTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('apiInfoPopup').style.display = (document.getElementById('apiInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+
+  <div id="apiInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Node.js Tab Help:</strong><br>
+    - This tab allows you to dynamically register API endpoints in your Node.js backend.<br>
+    - Use the refresh button to list all currently active endpoints.<br>
+    - To add a new route, enter the path (e.g. <code>/hello</code>) and the handler code.<br>
+    - The code should define a function <code>handler(req, res)</code>.<br>
+    - The endpoint is immediately live once added.<br>
+    - To create an endpoint that requires a password, just check the require auth checkbox.
+  </div>
+
+  <div class="card" style="position: relative;">
+  <h1 style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <span>Node.js Endpoints</span>
+    <span style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+      <span>Use Cluster APIs</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleClusterApi" onchange="toggleClusterApi()" />
+        <span class="slider"></span>
+      </label>
+    </span>
+  </h1>
+
+  <button onclick="refreshNodeEndpoints()">Refresh Endpoints</button>
+  <div id="nodejsRoutes" style="margin-top: 1rem;"></div>
+</div>
+
+<div class="card" id="editApiCard" style="display: none;margin-top:24px;">
+  <h2>Edit API Endpoint</h2>
+
+  <input type="text" id="editApiPath" placeholder="/your-endpoint" readonly />
+
+  <select id="editApiMethod" style="display:none;max-width: 120px; margin: 8px 0;">
+    <option value="get">GET</option>
+    <option value="post">POST</option>
+    <option value="put">PUT</option>
+    <option value="delete">DELETE</option>
+  </select>
+
+<div style="margin-bottom: 1rem;">
+  <label for="editApiAuthRequired" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; margin: 0;">
+    <input type="checkbox" id="editApiAuthRequired" style="width: auto; margin: 0;" />
+    Require auth?
+  </label>
+</div>
+
+
+  <textarea id="editApiCode" placeholder="function handler(req, res) {res.json({ status: 'ok', message: 'Your dynamic API is working!' });}" style="height: 150px;"></textarea>
+
+  <button id="apieditbtn" onclick="saveEditedEndpoint()">Save Changes</button>
+  <button id="apicancelbtn" onclick="cancelApiEdit()">Cancel</button>
+  <div class="message" id="editApiLog"></div>
+
+  
+</div>
+
+
+
+ <div class="card" style="margin-top:24px;">
+  <h2>Add New API Endpoint</h2>
+
+ <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap;">
+  <select id="apiMethod" style="max-width: 120px;">
+    <option value="get">GET</option>
+    <option value="post">POST</option>
+    <option value="put">PUT</option>
+    <option value="delete">DELETE</option>
+  </select>
+
+  <input type="text" id="apiPath" placeholder="/your-endpoint" style="flex: 1;" />
+</div>
+
+<div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+  <input type="checkbox" id="apiAuthRequired" style="width: auto; margin: 0;" />
+  <label for="apiAuthRequired" style="margin: 0;">Require auth?</label>
+</div>
+
+
+  <textarea id="apiCode" placeholder="res.end('hello world');" style="height: 150px;"></textarea>
+
+  <button id="apiSubmitBtn" onclick="addNodeEndpoint()">Add Endpoint</button>
+
+  <div class="message" id="nodejsLog"></div>
+</div>
+
+
+
+<div class="card" style="margin-top:24px;">
+  <h2>Push Endpoints</h2>
+  <button onclick="pushDynamicApiVersion()">Push endpoints to cluster</button>
+  <div class="message" id="dynamicApiPushLog"></div>
+</div>
+
+<div class="card" style="margin-top:24px;">
+  <h2>API Version History</h2>
+  <button onclick="checkApiVersions()">Check API Versions</button>
+  <div id="apiVersionList" style="margin-top: 1rem;"></div>
+
+<div class="message" id="apivmessage" style="max-height:350px;overflow-y:scroll;"></div>
+</div>
+</div>
+
+
+<div class="card" id="privatevariablesTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('privatevariablesInfoPopup').style.display =
+         (document.getElementById('privatevariablesInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+
+  <div id="privatevariablesInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Instance Variables Help:</strong><br>
+    - Add variables with a unique key.<br>
+    - The prefix <code>extravar.</code> is automatically enforced.
+  </div>
+
+  <h2 style="margin-bottom: 16px;">Instance Variables</h2>
+
+  <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 4px;">
+      <span style="font-weight: bold;">extravar.</span>
+      <input id="newVarName" placeholder="yourKey" style="padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; min-width: 120px;" />
+    </div>
+    <input id="newVarValue" placeholder="Variable value" style="padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; min-width: 180px;" />
+    <button onclick="addPrivateVariable()" style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      Add Variable
+    </button>
+  </div>
+
+  <div id="privateVarList" style="margin-top: 1rem;"></div>
+  <div class="message" id="privateVarMessage" style="max-height: 300px; overflow-y: auto; margin-top: 10px;"></div>
+
+</div>
+
+<div id="clusterTab" style="display:none;">
+  <div class="card" id="card" style="padding: 16px; border-radius: 8px; position: relative;">
+    <h1 style="margin-top: 0;">Browse Cluster Files</h1>
+    <button onclick="loadClusterFiles()" style="width: 100%;">Load Cluster Files</button>
+    <div id="clusterTree" style="margin-top: 1rem;">Not loaded yet.</div>
+    <div id="clusterFileView" class="section" style="margin-top: 1rem;"></div>
+
+
+    <div style="position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 18px;" onclick="document.getElementById('clusterInfoPopup').style.display = (document.getElementById('clusterInfoPopup').style.display === 'block') ? 'none' : 'block';">❓</div>
+
+
+    <div id="clusterInfoPopup" style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9;padding: 10px; border-radius: 6px; font-size: 12px; width: 240px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <strong>Cluster Info:</strong><br>
+      Use this section to view and interact with files stored across the cluster.<br><br>
+      Click "Load Cluster Files" to fetch the directory structure. You can then preview, edit, or manage files.
+    </div>
+  </div>
+</div>
+
+  <div id="sidedishTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('sidedishInfoPopup').style.display = (document.getElementById('sidedishInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+  <div id="sidedishInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Side Dish Info:</strong><br>
+    - This is a side dish to the hotpocket contract, it allows you to write your own smart contract code, and then submit it for voting. If all instances in your cluster vote yes on it (based on the quorum), then the code will go live and be a part of the consensus. You can always vote for an other version of the code, but if it breaks the system then that is obviously a problem.
+    - Fetch the current `sidedish.js` from the cluster to view or edit.<br>
+    - Use "Edit Local" to make changes, then "Save" to keep them locally.<br>
+    - Push your version to the cluster when ready.<br>
+    - Use version control below to activate or delete cluster versions.
+  </div>
+  <div class="card" id="card">
+    <h1>Side Dish</h1>
+
+    <div style="margin-bottom: 1rem;">
+     <!-- <button onclick="fetchSidedishFromCluster()">Fetch sidedish.js from Cluster</button> -->
+      <button onclick="loadLocalSidedish()">Edit Local sidedish.js</button>
+    </div>
+
+    <div id="sidedishEditor" style="display:none;">
+      <textarea id="sidedishTextArea" style="width:100%; height:300px;"></textarea>
+      <button onclick="saveLocalSidedish()">Save sidedish.js Locally</button>
+      <button onclick="disableButtonTemporarily(this, () => uploadSidedishJS())">Push sidedish.js to cluster</button>
+      <div class="message" id="sidedishUploadLog"></div>
+    </div>
+
+    <div class="card">
+      <h2>Side Dish Versions</h2>
+      <button onclick="listSidedishVersions()">Check Versions</button>
+      <div id="sidedishVersionList" style="margin-top: 1rem;"></div>
+    </div>
+  </div>
+</div>
+
+  <div id="usersTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('userTabInfoPopup').style.display = (document.getElementById('userTabInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+  <div id="userTabInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>User Management Info:</strong><br>
+    - Use this tab to add, remove, or update users.<br>
+    - The default user is <code>admin</code>; it cannot be removed.<br>
+    - Changing a password requires the current one.<br>
+    - Be sure passwords match before submitting.
+  </div>
+
+  <div class="card" id="userAdminCard">
+    <h2>User Management</h2>
+
+    <h3>Add User</h3>
+    <input type="text" id="addUsername" placeholder="Username" />
+    <input type="password" id="addPassword" placeholder="Password" />
+    <button onclick="addUser()">Add User</button>
+
+    <h3>Remove User</h3>
+    <input type="text" id="removeUsername" placeholder="Username (cannot be 'admin')" />
+    <button onclick="removeUser()">Remove User</button>
+
+    <h3>Change Password</h3>
+    <input type="text" id="changeUser" placeholder="Username" />
+    <input type="password" id="oldPassword" placeholder="Old Password" />
+    <input type="password" id="newPassword" placeholder="New Password" />
+    <input type="password" id="newPasswordConfirm" placeholder="Confirm New Password" />
+    <button onclick="changePassword()">Change Password</button>
+  </div>
+</div>
+
+<div id="clusteroperationsTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('clusterOpsInfoPopup').style.display = (document.getElementById('clusterOpsInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+  <div id="clusterOpsInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Cluster Operations Info:</strong><br>
+    - Use this panel to monitor live logs from the node.<br>
+    - Toggle "Trace Logs Live" to stream logs in real time.<br>
+    - <code>hp.log</code>: Contract events and internal logic<br>
+    - <code>stdout.log</code> & <code>stderr.log</code>: Output from your contract<br>
+    - For performance, avoid keeping live trace on unless needed.
+  </div>
+
+  <div class="card" id="card">
+    <h1>Operate Cluster</h1>
+    
+    <h2>Live Logs</h2>
+    <div class="switch-block">
+      <label class="switch">
+        <input type="checkbox" id="logTraceToggle" onchange="toggleLogTrace()" />
+        <span class="slider"></span>
+      </label>
+      <div class="switch-label">Trace Logs Live</div>
+    </div>
+    
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <div class="section" style="flex: 1; max-width: 900px;">
+        <h3>hp.log</h3>
+        <pre id="hpLog" style="max-height: 300px; overflow-y: scroll; background: #eee;"></pre>
+      </div>
+      <div class="section" style="flex: 1; max-width: 900px;">
+        <h3>stdout.log</h3>
+        <pre id="stdoutLog" style="max-height: 300px; overflow-y: scroll; background: #eee;"></pre>
+      </div>
+      <div class="section" style="flex: 1; max-width: 900px;">
+        <h3>stderr.log</h3>
+        <pre id="stderrLog" style="max-height: 300px; overflow-y: scroll; background: #eee;"></pre>
+      </div>
+    </div>
+
+</div>
+</div>
+
+
+<div id="nodejsTab" class="card" style="display: none; position: relative; padding: 16px;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('nodejsInfoPopup').style.display = (document.getElementById('nodejsInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+  <div id="nodejsInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Node JS Info:</strong><br>
+    - Install new packages with npm<br>
+    - Add packages to nodejs (require)<br>
+    - Check nodejs server logs
+  </div>
+
+  <h2>Install NPM Package (Locally)</h2>
+  <form id="installForm" style="margin-bottom: 32px;">
+    <label for="package">Package Name:</label>
+    <input type="text" id="package" name="package" placeholder="e.g. express" required />
+    <br><br>
+    <label for="version">Version (optional):</label>
+    <input type="text" id="version" name="version" placeholder="e.g. 4.18.2" />
+    <br><br>
+    <button type="submit" style="background:#000;">Install</button>
+  </form>
+  <pre id="response" style="margin-top: 20px;"></pre>
+
+  <h2>Uninstall NPM Package (Locally)</h2>
+  <form id="uninstallForm" style="margin-bottom: 32px;">
+    <label for="unpkg">Package Name:</label>
+    <input type="text" id="unpkg" name="unpkg" placeholder="e.g. express" required />
+    <br><br>
+    <button type="submit" style="background:#000;">Uninstall</button>
+  </form>
+  <pre id="unresponse" style="margin-top: 20px;"></pre>
+
+  <h2>Node.js Logs</h2>
+  <div class="switch-block" style="margin-bottom: 16px;">
+    <label class="switch">
+      <input type="checkbox" id="nodeLogToggle" onchange="toggleNodeLogs()" />
+      <span class="slider"></span>
+    </label>
+    <div class="switch-label">Show Node.js Logs</div>
+  </div>
+
+  <div class="section" style="flex: 1; max-width: 900px; margin-bottom: 24px;">
+    <h3>webadmin.out.log</h3>
+    <pre id="nodeStdout" style="max-height: 300px; overflow-y: scroll; background: #eee;"></pre>
+  </div>
+
+  <div class="section" style="flex: 1; max-width: 900px;">
+    <h3>webadmin.err.log</h3>
+    <pre id="nodeStderr" style="max-height: 300px; overflow-y: scroll; background: #eee;"></pre>
+  </div>
+
+  <h2>Manage Extra Node Modules</h2>
+  <div style="display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 32px;">
+    <div style="flex: 1; min-width: 300px;">
+      <h3>Available Modules</h3>
+      <ul id="availableModules" style="list-style: none; padding-left: 0; margin: 0;max-height:350px;overflow-y:scroll;"></ul>
+    </div>
+
+    <div style="flex: 1; min-width: 300px;">
+      <h3>Extra Modules (Loaded)</h3>
+      <ul id="extraModules" style="list-style: none; padding-left: 0; margin: 0;"></ul>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<div id="clustersettingsTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('clusterSettingsInfoPopup').style.display = (document.getElementById('clusterSettingsInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+
+  <div id="clusterSettingsInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Cluster Settings Help:</strong><br>
+    - Use the red/green buttons to stop or restart HotPocket.<br>
+    - Import or generate a keypair for this node.<br>
+    - Update UNL (validators), known peers, and round settings.<br>
+    - Public keys and ports are auto-filled; no need to edit them manually.<br>
+    - The most reliable way to create a cluster is to configure one instance as the primary node (just a temporare thing) by adding the public keys of all other instances to its UNL. On the remaining instances, set only the primary node’s public key in their UNL, and include its contract ID, mesh address, and port as a known peer.<br>
+    <b>Note:</b> You must restart each instance after adding or removing entries from the UNL, and if you want to import a keypair you need to stop Evernode first.
+
+  </div>
+
+  <div class="card" id="card">
+    <h1>Cluster Settings</h1>
+    <button onclick="stopHotPocket()" style="background: #dc2626; max-width:300px; padding:6px; font-size:12px;">Stop Evernode (HP)</button>
+    <button style="background: #0e8532; max-width:300px; padding:6px; font-size:12px;" onclick="restartHotPocket()">Restart Evernode (HP)</button>
+
+    <form id="hpinfoForm">
+      <label>Public Key: <input type="text" style="background:#f0f0f0" name="public_key" readonly /></label><br />
+      <button style="background:#000!important;max-width:300px;padding:6px;font-size:12px;" onclick="importPrivateKey()">Import A Keypair</button>
+      <button style="background:#000!important;max-width:300px;padding:6px;font-size:12px;" type="button" onclick="showCurrentKeypair()">Show Node Keypair</button>
+      <button style="background:#000!important;max-width:300px;padding:6px;font-size:12px;" type="button" onclick="generateAndShowKeypair()">Generate Keypair</button>
+      <br>
+      <label>Contract ID: <input type="text" name="contract_id" /></label><br />
+      <div>
+        <label>UNL:</label>
+        <div id="unlList"></div>
+        <button type="button" onclick="addUnlField()">Add UNL</button>
+      </div>
+      <div style="margin-top:1rem;">
+        <label>Known Peers:</label>
+        <div id="knownPeersList"></div>
+        <button type="button" onclick="addKnownPeerField()">Add Known Peer</button>
+      </div>
+      <label>Your User Port: <input type="number" style="background:#f0f0f0" name="user_port" readonly /></label><br />
+      <div style="margin-bottom: 1rem;">
+        <label for="mesh_port_label">Your Mesh Address and Port (used in peer list):</label>
+        <input type="text" id="mesh_port_label" readonly style="background: #f0f0f0; border: 1px solid var(--gray); padding: 0.6rem 0.8rem; width: 100%; border-radius: 0.5rem; margin-top: 0.3rem;" />
+      </div>
+      <input type="hidden" name="mesh_port" />
+      <label>Roundtime (ms): <input type="number" name="roundtime" /></label><br />
+      <label>Stage Slice: <input type="number" name="stage_slice" /></label><br />
+      <label>Threshold (%): <input type="number" name="threshold" /></label><br />
+      <button type="submit">Update</button>
+    </form>
+
+    <p id="hpinfoStatus"></p>
+  </div>
+</div>
+  <div id="loginTab">
+  <div class="card" id="card" style="padding: 16px; border-radius: 8px; position: relative;">
+    <h1 style="margin-top: 0;">Admin File Manager</h1>
+    <span style="font-size:12px;">Default: admin</span><br>
+    <input type="text" id="username" placeholder="Username" style="width: 100%; margin-bottom: 8px;" />
+    <span style="font-size:12px;">Default: password</span>
+    <input type="password" id="password" placeholder="Password" style="width: 100%; margin-bottom: 8px;" />
+    <button onclick="loadFolders();" style="width: 100%;">Login & Load Folders</button>
+
+    <!-- Info box -->
+    <div style="position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 18px;" onclick="document.getElementById('infoPopup').style.display = (document.getElementById('infoPopup').style.display === 'block') ? 'none' : 'block';">❓</div>
+    <div id="infoPopup" style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 200px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <strong>Login Info:</strong><br>
+      Default username is <code>admin</code><br>
+      Default password is <code>password</code><br>
+      You can change your credentials in the User Management Section.<br><br>
+      The password is local, so you can't use it to log in on other peoples instances even thought they are in the same cluster.
+    </div>
+    <!-- Info box END -->
+
+  </div>
+</div>
+
+<div id="managerTab" style="display: none; position: relative;">
+
+  <div style="position: absolute; top: 8px; right: 8px; font-size: 18px; cursor: pointer; z-index: 10;"
+       onclick="document.getElementById('managerInfoPopup').style.display = (document.getElementById('managerInfoPopup').style.display === 'block') ? 'none' : 'block';">
+    ❓
+  </div>
+
+
+  <div id="managerInfoPopup"
+       style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 10;">
+    <strong>Manager Tab Info:</strong><br>
+    - Left side: Browse folders or create new ones.<br>
+    - Right side: Upload or manage files in the selected folder.<br>
+    - Use the switch below to toggle between local files and cluster files (on the frontend).<br>
+    - Use the push local files to cluster button to push your local files to the cluster (and everyone in it).<br>
+    - Check version history and manage active versions.
+  </div>
+
+  <div id="fileandedit" class="grid">
+    <div class="section tree">
+      <h3>Folders</h3>
+      <div id="folderTree">Click 'Login & Load Folders'</div>
+      <input type="text" id="newFolderName" placeholder="New subfolder or file name" />
+      <button onclick="disableButtonTemporarily(this, () => Promise.resolve(createSubfolder()))">Create Folder in Selected</button>
+      <button onclick="disableButtonTemporarily(this, () => Promise.resolve(createEmptyFile()))">Create File in Selected</button>
+    </div>
+
+    <div class="section editorsection">
+      <h3>Files in <span id="selectedPathDisplay">(none)</span></h3>
+      <div id="fileList">No folder selected.</div>
+      <div class="dropzone" id="dropzone">Drag & Drop Files Here</div>
+      <input type="file" id="fileInput" multiple />
+      <button onclick="disableButtonTemporarily(this, () => uploadFiles())">Upload Files</button>
+      <div class="filemessage" id="filemessage" style="max-height:350px;overflow-y:scroll;"></div>
+    </div>
+  </div>
+
+  <div class="switch-block">
+    <label class="switch">
+      <input type="checkbox" id="clusterToggle" onchange="saveClusterSetting()" />
+      <span class="slider"></span>
+    </label>
+    <div class="switch-label">Serve files from cluster</div>
+    <div class="switch-description" style="padding-bottom:6px;">
+      This means you serve the website from the Evernode State folder instead of the instance's locally held files. The files you see on this page are held locally though.
+    </div>
+    <button onclick="disableButtonTemporarily(this, () => pushLocalFilesToCluster())">Push Local Files to Cluster</button>
+    <h3>Manage Versions</h3>
+    <button onclick="disableButtonTemporarily(this, () => checkVersions())">Check Versions</button>
+    <div id="versionList" style="margin-top:1rem;"></div>
+  </div>
+
+  <div class="message" id="message" style="max-height:350px;overflow-y:scroll;"></div>
+</div>
+
+</div></div>
+  <script>
+let useClusterApis = false;
+let clusterMore = false;
+let nodeLogInterval;
+
+
+
+
+
+function toggleClusterApi() {
+  const useCluster = document.getElementById('toggleClusterApi').checked;
+  useClusterApis = useCluster;
+
+  fetch('/admin/set-api-mode', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ useCluster })
+  }).then(() => {
+    updateApiUiMode(useCluster);
+    refreshNodeEndpoints(); 
+  });
+}
+
+
+async function fetchAvailableModules() {
+  const res = await fetch('/admin/modules/available', {
+    headers: {
+      'Authorization': getAuthHeader()
+    }
+  });
+  const data = await res.json();
+  const list = document.getElementById('availableModules');
+  list.innerHTML = '';
+  data.available.forEach(mod => {
+    const li = document.createElement('li');
+    li.style.marginBottom = '6px';
+    li.innerHTML = `${mod} <a href="#" onclick="loadModule('${mod}'); return false;" style="margin-left: 8px; font-size: 12px; color: #007bff; text-decoration: underline;">[Load]</a>`;
+    list.appendChild(li);
+  });
+}
+
+
+  async function fetchExtraModules() {
+   const res = await fetch('/admin/modules/extra', {
+    headers: {
+      'Authorization': getAuthHeader()
+    }
+  });
+    const data = await res.json();
+    const list = document.getElementById('extraModules');
+    list.innerHTML = '';
+    data.extra.forEach(mod => {
+      const li = document.createElement('li');
+      li.textContent = mod;
+      list.appendChild(li);
+    });
+  }
+
+async function loadModule(name) {
+  try {
+    const res = await fetch('/admin/modules/extra', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthHeader()
+      },
+      body: JSON.stringify({ name })
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error);
+
+    if (res.ok) {
+
+      await fetchAvailableModules();
+      await fetchExtraModules();
+    }
+
+  } catch (err) {
+    alert("Failed to load module: " + err.message);
+  }
+}
+
+
+document.getElementById('uninstallForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const pkg = document.getElementById('unpkg').value.trim();
+    const responseEl = document.getElementById('unresponse');
+    responseEl.textContent = 'Uninstalling...';
+
+    try {
+      const response = await fetch('/admin/uninstall', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': getAuthHeader()
+        },
+        body: JSON.stringify({ package: pkg })
+      });
+
+      const text = await response.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+        fetchAvailableModules();
+        fetchExtraModules();
+      } catch {
+        data = { error: text };
+      }
+
+      responseEl.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      responseEl.textContent = 'Error: ' + err.message;
+    }
+  });
+  
+ document.getElementById('installForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const pkg = document.getElementById('package').value.trim();
+    const version = document.getElementById('version').value.trim();
+
+    const responseEl = document.getElementById('response');
+    responseEl.textContent = 'Installing...';
+
+    try {
+      const response = await fetch('/admin/install', {
+        method: 'POST',
+         headers: {
+          'Content-Type': 'application/json',
+          'Authorization': getAuthHeader()
+        },
+        body: JSON.stringify({
+          package: pkg,
+          version: version || undefined
+        })
+      });
+
+const text = await response.text();
+let data;
+
+try {
+  data = JSON.parse(text);
+  fetchAvailableModules();
+  fetchExtraModules();
+} catch {
+  data = { error: text };
+}
+
+responseEl.textContent = JSON.stringify(data, null, 2);
+
+      responseEl.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      responseEl.textContent = 'Error: ' + err.message;
+    }
+  });
+
+
+  function toggleNodeLogs() {
+    const enabled = document.getElementById('nodeLogToggle').checked;
+    const stdoutEl = document.getElementById('nodeStdout');
+    const stderrEl = document.getElementById('nodeStderr');
+
+    if (enabled) {
+      nodeLogInterval = setInterval(async () => {
+        try {
+          const [stdoutRes, stderrRes] = await Promise.all([
+            fetch('/admin/nodestdout', {headers: { 'Authorization': getAuthHeader() }}),
+            fetch('/admin/nodestderr', {headers: { 'Authorization': getAuthHeader() }})
+          ]);
+          const stdout = await stdoutRes.text();
+          const stderr = await stderrRes.text();
+
+          stdoutEl.textContent = stdout;
+          stderrEl.textContent = stderr;
+
+          stdoutEl.scrollTop = stdoutEl.scrollHeight;
+          stderrEl.scrollTop = stderrEl.scrollHeight;
+        } catch (err) {
+          stdoutEl.textContent = 'Error loading stdout';
+          stderrEl.textContent = 'Error loading stderr';
+        }
+      }, 2000);
+    } else {
+      clearInterval(nodeLogInterval);
+    }
+  }
+
+function updateApiUiMode(useCluster) {
+
+  document.getElementById('apiSubmitBtn').style.display = useCluster ? 'none' : '';
+  document.getElementById('apieditbtn').style.display = useCluster ? 'none' : '';
+  document.getElementById('apicancelbtn').style.display = useCluster ? 'none' : '';
+  document.getElementById('apiPath').disabled = useCluster;
+  document.getElementById('apiMethod').disabled = useCluster;
+  document.getElementById('apiAuthRequired').disabled = useCluster;
+  document.getElementById('apiCode').readOnly = useCluster;
+
+const msgMain = document.getElementById('nodejsLog');
+msgMain.textContent = useCluster ? 'Cluster mode is enabled. Endpoints are read-only.' : '';
+const msgEdit = document.getElementById('editApiLog');
+msgEdit.textContent = useCluster ? 'Cluster mode is enabled. Endpoints are read-only.' : '';
+}
+
+function loadApiModeAndRefresh() {
+  const authHeader = getAuthHeader();
+  if (!authHeader) return;
+
+  fetch('/admin/get-api-mode', {
+    headers: { 'Authorization': authHeader }
+  })
+    .then(res => res.text())
+    .then(text => {
+      try {
+        const data = JSON.parse(text);
+        const toggle = document.getElementById('toggleClusterApi');
+        toggle.checked = data.useCluster;
+        useClusterApis = data.useCluster;
+        updateApiUiMode(data.useCluster);
+        refreshNodeEndpoints();
+      } catch (e) {
+        console.error('Failed to parse API mode response:', text);
+      }
+    })
+    .catch(err => {
+      console.error('Failed to get API mode:', err);
+    });
+}
+
+
+
+let editingEndpointPath = null;
+
+
+async function pushDynamicApiVersion() {
+  const log = document.getElementById('dynamicApiPushLog');
+  log.innerHTML = 'Pushing...';
+
+  try {
+    const res = await fetch('/admin/push-api', {
+      method: 'POST',
+      headers: { 'Authorization': getAuthHeader() }
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      log.innerHTML = `<div>${escapeHtml(data.message)}</div>`;
+    } else {
+      log.innerHTML = `<div style="color:red;">${escapeHtml(data.error)}</div>`;
+    }
+  } catch (err) {
+    log.innerHTML = `<div style="color:red;">Push failed: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+
+let moreFuncCards = [];
+
+function loadMoreFunctions() {
+  fetch('/toggle-morefunctions-source', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+    .then(res => res.json())
+    .then(data => {
+      clusterMore = !!data.clusterMore;
+      const statusText = document.getElementById('clusterMoreStatus');
+      if (statusText) {
+        statusText.textContent = clusterMore
+          ? 'Using cluster version of morefunctions.json (view-only)'
+          : 'Using local morefunctions.json (editable)';
+      }
+
+      return fetch('/morefunctions/load', {
+        headers: { 'Authorization': getAuthHeader() }
+      });
+    })
+    .then(res => res.json())
+    .then(cards => {
+      moreFuncCards = cards;
+      renderCards();
+    });
+}
+
+function renderCards() {
+  const area = document.getElementById('cards-area');
+  area.innerHTML = '';
+
+  moreFuncCards.forEach((html, idx) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'card';
+    wrapper.style = 'margin-bottom: 1rem; position: relative; padding-bottom: 2rem;';
+
+    const rendered = document.createElement('div');
+    rendered.className = 'rendered-html';
+    rendered.style = 'border: 1px solid #ddd; padding: 1rem; border-radius: 6px; background: #fefefe;';
+    rendered.innerHTML = html;
+    wrapper.appendChild(rendered);
+
+    rendered.querySelectorAll('script').forEach(oldScript => {
+      const newScript = document.createElement('script');
+      if (oldScript.src) {
+        newScript.src = oldScript.src;
+      } else {
+        newScript.textContent = oldScript.textContent;
+      }
+      oldScript.replaceWith(newScript);
+    });
+
+    const textarea = document.createElement('textarea');
+    textarea.value = html;
+    textarea.style = 'width: 100%; height: 120px; margin-top: 10px; font-family: monospace;';
+    textarea.hidden = true;
+    wrapper.appendChild(textarea);
+
+    if (!clusterMore) {
+      const editBtn = document.createElement('button');
+      editBtn.innerText = '✏️ Edit';
+      editBtn.style = 'margin-right: 8px;';
+      editBtn.onclick = () => {
+        textarea.hidden = false;
+        rendered.hidden = true;
+      };
+
+      const saveBtn = document.createElement('button');
+      saveBtn.innerText = '💾 Save';
+      saveBtn.style = 'margin-right: 8px;';
+      saveBtn.onclick = () => {
+        moreFuncCards[idx] = textarea.value;
+        saveAllCards();
+        renderCards();
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerText = '🗑 Delete';
+      deleteBtn.style = 'color: red;';
+      deleteBtn.onclick = () => {
+        if (confirm('Delete this card?')) {
+          moreFuncCards.splice(idx, 1);
+          saveAllCards();
+          renderCards();
+        }
+      };
+
+      wrapper.appendChild(editBtn);
+      wrapper.appendChild(saveBtn);
+      wrapper.appendChild(deleteBtn);
+    }
+
+    area.appendChild(wrapper);
+  });
+
+  const uploadDiv = document.getElementById('uploadfuncsdiv');
+  if (uploadDiv) {
+    uploadDiv.style.display = clusterMore ? 'none' : 'block';
+  }
+
+  const addCardBtn = document.getElementById('addMoreCardBtn');
+  if (addCardBtn) {
+    addCardBtn.style.display = clusterMore ? 'none' : 'inline-block';
+  }
+}
+  function toggleDarkMode() {
+    const body = document.body;
+    const isDark = body.classList.toggle('dark');
+    document.getElementById('themeIcon').textContent = isDark ? '🌙' : '🌞';
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const isDark = localStorage.getItem('darkMode') === 'enabled';
+    if (isDark) {
+      document.body.classList.add('dark');
+      document.getElementById('darkModeToggle').checked = true;
+      document.getElementById('themeIcon').textContent = '🌙';
+    }
+  });
+
+function uploadMoreFunctionsJson() {
+  const log = document.getElementById('moreuploadlog');
+  log.innerText = 'Uploading...';
+
+  fetch('/admin/morefunctions-upload', {
+    method: 'POST',
+    headers: { 'Authorization': getAuthHeader() }
+  })
+    .then(async res => {
+      if (!res.ok) {
+        const text = await res.text(); // Read the raw HTML
+        throw new Error(`HTTP ${res.status}: ${text}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      log.innerText = data.message || data.error || 'Unexpected response.';
+    })
+    .catch(err => {
+      log.innerText = 'Upload failed: ' + err.message;
+    });
+}
+
+async function loadPrivateVariables() {
+    try {
+      const res = await fetch('/admin/vars/extra', { headers: { 'Authorization': getAuthHeader() } });
+      const data = await res.json();
+      const list = document.getElementById('privateVarList');
+      list.innerHTML = '';
+
+      for (const [name, value] of Object.entries(data.extra)) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.marginBottom = '10px';
+       card.innerHTML = `
+  <div style="
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start;
+  ">
+    <div style="flex: 1;">
+      <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">${name}</div>
+      <code style="font-size: 13px; color: #555; word-break: break-word;">${JSON.stringify(value)}</code>
+    </div>
+    <button 
+      onclick="deletePrivateVariable('${name}')"
+      style="background: transparent;border: none;color: #000;font-size: 16px;cursor: pointer;padding: 0;max-width:50px;"
+      title="Delete"
+    >🗑</button>
+  </div>
+`;
+        list.appendChild(card);
+      }
+    } catch (err) {
+      document.getElementById('privateVarMessage').innerText = 'Failed to load variables: ' + err.message;
+    }
+  }
+
+ async function addPrivateVariable() {
+    const rawName = document.getElementById('newVarName').value.trim();
+    const valueRaw = document.getElementById('newVarValue').value;
+
+    if (!rawName || valueRaw === '') {
+      alert('Both key and value are required.');
+      return;
+    }
+
+    const name = `extravar.${rawName}`;
+    let value;
+
+    try {
+      value = JSON.parse(valueRaw);
+    } catch {
+      value = valueRaw;
+    }
+
+    const res = await fetch('/admin/vars/extra', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthHeader()
+      },
+      body: JSON.stringify({ name, value })
+    });
+
+    const data = await res.json();
+    document.getElementById('privateVarMessage').innerText = data.message || data.error;
+    loadPrivateVariables();
+
+    // Clear fields
+    document.getElementById('newVarName').value = '';
+    document.getElementById('newVarValue').value = '';
+  }
+
+  async function deletePrivateVariable(name) {
+    if (!confirm(`Delete variable "${name}"?`)) return;
+
+    const res = await fetch('/admin/vars/extra', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthHeader()
+      },
+      body: JSON.stringify({ name })
+    });
+
+    const data = await res.json();
+    document.getElementById('privateVarMessage').innerText = data.message || data.error;
+    loadPrivateVariables();
+  }
+
+  // Optional: auto-load when tab is shown
+  // document.getElementById('privatevariablesTab').style.display = 'block'; // if testing
+  // loadPrivateVariables();
+
+
+function fetchMoreFunctionVersion(name) {
+  fetch('/admin/morefunctions-fetch', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ version: name })
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message || data.error || 'Done');
+    })
+    .catch(err => {
+      alert('Fetch failed: ' + err.message);
+    });
+}
+
+
+
+function addCard() {
+  moreFuncCards.push('<div><p>New Custom Block</p></div>');
+  renderCards();
+  saveAllCards();
+}
+
+function saveAllCards() {
+  fetch('/morefunctions/save', {
+    method: 'POST',
+    headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cards: moreFuncCards })
+  }).then(res => res.json()).then(data => {
+    if (!data.success) alert('Save failed');
+  });
+}
+
+
+function refreshNodeEndpoints() {
+  const container = document.getElementById('nodejsRoutes');
+  container.innerHTML = 'Loading...';
+
+  fetch('/admin/list-endpoints', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!Array.isArray(data)) throw new Error('Invalid format');
+      
+      container.innerHTML = data.map(ep => {
+        const escapedMethod = escapeHtml(ep.method.toUpperCase());
+        const escapedPath = escapeHtml(ep.path);
+
+        const editLabel = useClusterApis ? 'View' : 'Edit';
+        const deleteBtn = useClusterApis ? '' : `
+          <button onclick="deleteNodeEndpoint('${ep.method}', '${ep.path}')">Delete</button>`;
+
+        return `
+          <div class="file-item">
+            <span>${escapedMethod} ${escapedPath}</span>
+            <div style="display:flex; gap:0.5rem;">
+              <button onclick="editNodeEndpointPrompt('${ep.path}')">${editLabel}</button>
+              ${deleteBtn}
+            </div>
+          </div>
+        `;
+      }).join('');
+    })
+    .catch(err => {
+      container.innerHTML = 'Failed to load endpoints: ' + err.message;
+    });
+}
+
+function editNodeEndpointPrompt(path) {
+  const endpointUrl = useClusterApis ? '/admin/read-api-cluster' : '/admin/read-api-local';
+
+  fetch(endpointUrl, { // ← was `url` before — fixed here
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const endpoints = JSON.parse(data.content || '[]');
+    const match = endpoints.find(ep => ep.path === path);
+    if (!match) {
+      alert('Endpoint not found.');
+      return;
+    }
+
+    document.getElementById('editApiCard').style.display = 'block';
+
+    document.getElementById('editApiPath').value = match.path;
+    document.getElementById('editApiCode').value = match.code || '';
+    document.getElementById('editApiAuthRequired').checked = !!match.auth;
+    document.getElementById('editApiMethod').value = (match.method || 'get').toLowerCase();
+
+    document.getElementById('editApiCode').readOnly = useClusterApis;
+    document.getElementById('editApiAuthRequired').disabled = useClusterApis;
+    document.getElementById('editApiMethod').disabled = useClusterApis;
+
+    const log = document.getElementById('editApiLog');
+    log.textContent = useClusterApis ? 'Viewing from cluster. Editing is disabled.' : '';
+  })
+  .catch(err => {
+    alert('Failed to load endpoint: ' + err.message);
+  });
+}
+
+
+
+function saveEditedEndpoint() {
+  const path = document.getElementById('editApiPath').value.trim();
+  const code = document.getElementById('editApiCode').value.trim();
+  const auth = document.getElementById('editApiAuthRequired').checked;
+  const log = document.getElementById('editApiLog');
+const method = document.getElementById('editApiMethod').value.trim().toLowerCase();
+  if (!path || !code) {
+    log.innerHTML = '<div style="color:red;">Path and code are required.</div>';
+    return;
+  }
+
+  fetch('/admin/edit-endpoint', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ path, code, method, auth })
+  })
+  .then(res => res.json())
+  .then(data => {
+    log.innerHTML = `<div>${escapeHtml(data.message || data.error)}</div>`;
+    document.getElementById('nodejsLog').innerHTML = `<div>${escapeHtml(data.message || data.error)}</div>`;
+    refreshNodeEndpoints();
+    cancelApiEdit();
+  })
+  .catch(err => {
+    log.innerHTML = `<div style="color:red;">Save failed: ${escapeHtml(err.message)}</div>`;
+  });
+}
+
+
+function toggleClusterMoreFunctions() {
+  const useCluster = document.getElementById('toggleClusterMoreFunctions').checked;
+
+  fetch('/toggle-morefunctions-source', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ useCluster })
+  })
+    .then(() => loadMoreFunctions())
+    .catch(err => alert('Failed to toggle cluster mode: ' + err.message));
+}
+function initClusterMoreToggle() {
+  fetch('/toggle-morefunctions-source', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const checkbox = document.getElementById('toggleClusterMoreFunctions');
+      if (checkbox) checkbox.checked = !!data.clusterMore;
+    });
+}
+
+
+function cancelApiEdit() {
+  document.getElementById('editApiCard').style.display = 'none';
+  document.getElementById('editApiPath').value = '';
+  document.getElementById('editApiCode').value = '';
+  document.getElementById('editApiLog').innerHTML = '';
+}
+
+function deleteNodeEndpoint(method, path) {
+  if (!confirm(`Delete endpoint ${method.toLowerCase()} ${path}?`)) return;
+
+  fetch('/admin/delete-endpoint', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      method: method.toLowerCase(),
+      path
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message || data.error);
+    refreshNodeEndpoints();
+  });
+}
+
+
+
+
+function addNodeEndpoint() {
+  const path = document.getElementById('apiPath').value.trim();
+  const code = document.getElementById('apiCode').value.trim();
+  const method = document.getElementById('apiMethod').value.trim().toLowerCase();
+  const auth = document.getElementById('apiAuthRequired').checked;
+  const log = document.getElementById('nodejsLog');
+
+  if (!path || !code || !method) {
+    log.innerHTML = '<div style="color:red;">Path, method, and code required.</div>';
+    return;
+  }
+
+  fetch('/admin/add-endpoint', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ path, method, code, auth })
+  })
+  .then(res => res.json())
+  .then(data => {
+    log.innerHTML = `<div>${escapeHtml(data.message || data.error)}</div>`;
+    refreshNodeEndpoints();
+    document.getElementById('apiPath').value = '';
+    document.getElementById('apiCode').value = '';
+    document.getElementById('apiMethod').value = 'get'; 
+    document.getElementById('apiAuthRequired').checked = false;
+  })
+  .catch(err => {
+    log.innerHTML = `<div style="color:red;">Failed: ${escapeHtml(err.message)}</div>`;
+  });
+}
+
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('termsPopup');
+    popup.classList.add('active');
+  });
+
+
+ function acceptTerms() {
+   const popup = document.getElementById('termsPopup');
+   const mainContent = document.querySelector('.main-content');
+
+
+   popup.classList.remove('active');
+       
+
+
+ localStorage.setItem('termsAccepted', 'true');
+ }
+  if (localStorage.getItem('termsAccepted') === 'true') {
+     document.getElementById('termsPopup').classList.remove('active');
+           
+ }
+
+async function uploadSidedishJS() {
+  const log = document.getElementById('sidedishUploadLog');
+  log.innerHTML = '';
+
+  try {
+    const res = await fetch('/admin/sidedish-upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const result = await res.json();
+    if (result.error) {
+      log.innerHTML = `<div style="color:red;">Failed to upload: ${escapeHtml(result.error)}</div>`;
+    } else {
+      log.innerHTML = `<div>${escapeHtml(result.message)}</div>`;
+    }
+  } catch (err) {
+    log.innerHTML = `<div style="color:red;">Upload error: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+
+async function pushSidedishToCluster() {
+  if (!confirm("This will push the current local sidedish.js to the cluster in a new versioned folder. Proceed?")) return;
+
+  try {
+    const res = await fetch('/admin/push-sidedish', {
+      method: 'POST',
+      headers: { 'Authorization': getAuthHeader() }
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showMessagesidedish(data.message || 'Pushed successfully.');
+      listSidedishVersions();
+    } else {
+      showMessagesidedish(data.error || 'Unknown error.');
+    }
+  } catch (err) {
+    showMessagesidedish("Push failed: " + err.message);
+  }
+}
+async function toggleDeleteSidedish(version) {
+  try {
+    const res = await fetch('/admin/vote-delete-sd', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    showMessagesidedish(data.message || data.error);
+    listSidedishVersions();
+  } catch (err) {
+    showMessagesidedish("Delete vote failed: " + err.message);
+  }
+}
+
+async function listSidedishVersions() {
+  const container = document.getElementById('sidedishVersionList');
+  container.innerHTML = 'Loading...';
+
+  try {
+    const [treeRes, voteRes] = await Promise.all([
+      fetch('/admin/browse-cluster', {
+        headers: { 'Authorization': getAuthHeader() }
+      }),
+      fetch('/admin/my-sidedish-vote', {
+        headers: { 'Authorization': getAuthHeader() }
+      })
+    ]);
+
+    const tree = await treeRes.json();
+    const voteData = await voteRes.json();
+    const votedVersion = voteData.sidedish;
+    const voteMap = voteData.sidedishVotes || {};
+    const liveVersion = voteData.live;
+
+    const versions = tree['sidedish_versions'] || {};
+    const versionNames = Object.keys(versions).sort().reverse();
+
+    if (versionNames.length === 0) {
+      container.innerHTML = '<em>No versions found.</em>';
+      return;
+    }
+
+    container.innerHTML = versionNames.map(name => {
+      const vote = voteMap[name] || {};
+      const voted = vote.votedByMe;
+      const deleteVoted = vote.deleteVotedByMe;
+
+      return `
+        <div class="file-item" style="display:flex; justify-content:space-between; align-itemsenter;">
+          <div>
+            <strong>${name}</strong> ${name === liveVersion ? '<span style="color:green;">(LIVE)</span>' : ''}<br/>
+            <small>Votes: ${vote.votes || 0} ${voted ? '(you voted)' : ''}</small><br/>
+            <small>Delete votes: ${vote.deleteVotes || 0} ${deleteVoted ? '(you voted)' : ''}</small><br/>
+            <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="disableButtonTemporarily(this, () => fetchSidedishVersion('${name}'))">Fetch to local</button>
+          </div>
+          <div style="display:flex; flex-directionolumn; align-items:flex-end; gap:4px;">
+            ${
+              voted
+                ? '<span style="color:green;">✅ Already voted</span>'
+                : `<button onclick="disableButtonTemporarily(this, () => voteSidedishVersion('${name}'))">Go Live</button>`
+            }
+            ${
+              name === liveVersion
+                ? '<small style="color:#999;">Live version (cannot delete)</small>'
+                : `<label class="switch">
+                    <input type="checkbox" onchange="toggleDeleteSidedish('${name}', this.checked)" ${deleteVoted ? 'checked' : ''}>
+                    <span class="slider"></span>
+                   </label>`
+            }
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    container.innerHTML = 'Failed to list versions: ' + err.message;
+  }
+}
+
+
+async function voteSidedishVersion(version) {
+  if (!confirm(`Vote to activate sidedish version: ${version}?`)) return;
+
+  try {
+    const res = await fetch('/admin/promote-sidedish', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error || 'Unknown result');
+    listSidedishVersions();
+  } catch (err) {
+    alert('Vote failed: ' + err.message);
+  }
+}
+
+function fetchSidedishFromCluster() {
+  const confirmOverwrite = confirm("This will overwrite your local sidedish.js (if any). Proceed?");
+  if (!confirmOverwrite) return;
+
+  fetch('/admin/fetch-sidedish', {
+    method: 'POST',
+    headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' }
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessagesidedish(data.message || data.error);
+  })
+  .catch(err => {
+    showMessagesidedish('Fetch failed: ' + err.message);
+  });
+}
+
+function loadLocalSidedish() {
+  fetch('/admin/read-sd-local', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Unable to read local sidedish.js');
+    return res.json();
+  })
+  .then(data => {
+    document.getElementById('sidedishTextArea').value = data.content || '';
+    document.getElementById('sidedishEditor').style.display = 'block';
+  })
+  .catch(err => {
+    showMessagesidedish('Load failed: ' + err.message);
+  });
+}
+
+function saveLocalSidedish() {
+  const content = document.getElementById('sidedishTextArea').value;
+
+  fetch('/admin/file', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      path: '../sidedish.js',
+      content
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessagesidedish(data.message || data.error);
+  })
+  .catch(err => {
+    showMessagesidedish('Save failed: ' + err.message);
+  });
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, tag => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;',
+    '"': '&quot;', "'": '&#39;'
+  }[tag]));
+}
+
+async function stopHotPocket() {
+  if (!confirm("Are you sure you want to stop HotPocket?")) return;
+
+  try {
+    const response = await fetch('/admin/stop-hotpocket', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const result = await response.json();
+    alert(result.message || 'HotPocket stopped.');
+
+    setTimeout(() => {
+      updateHotPocketButtons();
+    }, 3000); // 3 seconds
+  } catch (err) {
+    alert('Error stopping HotPocket.');
+    console.error(err);
+  }
+}
+   
+async function generateAndShowKeypair() {
+  try {
+    const res = await fetch('/admin/generate-keypair', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await res.json();
+    if (data.privateKey && data.publicKey) {
+      alert("Keypair generated:\n\nPublic Key:\n" + data.publicKey + "\n\nPrivate Key:\n" + data.privateKey);
+    } else {
+      alert("Failed: " + data.error);
+    }
+  } catch (err) {
+    alert("Error generating keypair: " + err.message);
+  }
+}
+
+async function addUser() {
+  const username = document.getElementById('addUsername').value.trim();
+  const password = document.getElementById('addPassword').value;
+  if (!username || !password) return alert('Username and password required.');
+
+  const res = await fetch('/admin/add-user', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password })
+  });
+  const result = await res.json();
+  alert(result.message || result.error);
+}
+
+async function removeUser() {
+  const username = document.getElementById('removeUsername').value.trim();
+  if (!username) return alert('Username required.');
+  if (username === 'admin') return alert('Cannot remove admin user.');
+
+  const res = await fetch('/admin/remove-user', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username })
+  });
+  const result = await res.json();
+  alert(result.message || result.error);
+}
+async function changePassword() {
+  const username = document.getElementById('changeUser').value.trim();
+  const oldPassword = document.getElementById('oldPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const newPasswordConfirm = document.getElementById('newPasswordConfirm').value;
+
+  if (!username || !oldPassword || !newPassword || !newPasswordConfirm) {
+    return alert('All fields required.');
+  }
+
+  const res = await fetch('/admin/change-password', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, oldPassword, newPassword, newPasswordConfirm })
+  });
+
+  const result = await res.json();
+  alert(result.message || result.error);
+
+
+  if (res.ok) {
+    location.reload(); 
+  }
+}
+
+
+async function showCurrentKeypair() {
+  try {
+    const res = await fetch('/admin/show-keypair', {
+      headers: { 'Authorization': getAuthHeader() }
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      alert("Error: " + data.error);
+      return;
+    }
+
+    alert(`Public Key:\n${data.publicKey}\n\nPrivate Key:\n${data.privateKey}`);
+  } catch (err) {
+    alert("Failed to fetch keypair: " + err.message);
+  }
+}
+
+async function importPrivateKey() {
+  const pubKey = prompt("Enter your PUBLIC key (starting with 'ed'):");
+  const privKey = prompt("Enter your PRIVATE key (starting with 'ed'):");
+
+  if (
+    !pubKey || !privKey ||
+    !/^ed[0-9a-f]{64}$/i.test(pubKey) ||
+    !/^ed[0-9a-f]{128}$/i.test(privKey)
+  ) {
+    alert("Invalid key format.\nPublic key must be 'ed' + 64 hex chars.\nPrivate key must be 'ed' + 128 hex chars.");
+    return;
+  }
+
+  try {
+    const res = await fetch('/admin/import-key', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        public_key: pubKey,
+        private_key: privKey
+      })
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      alert("Key pair imported successfully.");
+      loadHPInfo(); // reload hp.cfg into UI
+    } else {
+      alert("Failed: " + (result.error || "Unknown error."));
+    }
+  } catch (err) {
+    alert("Import failed: " + err.message);
+  }
+}
+
+async function restartHotPocket() {
+  if (!confirm("Are you sure you want to restart HotPocket?")) return;
+
+  try {
+    const response = await fetch('/admin/restart-hotpocket', {
+      method: 'POST',
+      headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' },
+    });
+    const result = await response.json();
+    alert(result.message || 'Restart complete.');
+
+
+    setTimeout(() => {
+      updateHotPocketButtons();
+    }, 3000);
+  } catch (err) {
+    alert('Error restarting HotPocket.');
+    console.error(err);
+  }
+}
+
+const editableMimeTypes = [
+  'text/plain',
+  'text/html',
+  'text/css',
+  'application/json',
+  'application/javascript',
+  'application/xml',
+  'text/x-python',
+  'text/x-c',
+  'text/x-c++',
+  'text/markdown',
+  'text/x-sh',
+  'application/x-httpd-php',
+  'application/x-yaml',
+  'application/x-sql',
+];
+
+const editableExtensions = [
+  // Config & Shell
+  '.sh', '.cfg', '.override', '.conf', '.env', '.ini', '.log', 
+
+  // Plain text
+  '.txt', '.md', '.markdown', '.csv', '.tsv', '.json', '.yaml', '.yml', '.xml',
+
+  // Web files
+  '.html', '.htm', '.css', '.js', '.ts',
+
+  // Templates / Scripting
+  '.php', '.py', '.rb', '.pl', '.lua',
+
+  // Code / Dev files
+  '.c', '.cpp', '.h', '.hpp', '.java', '.cs', '.go', '.rs', '.swift', '.kt',
+
+  // Misc dev
+  '.sql', '.bat', '.dockerfile', '.makefile', '.gitignore', '.npmrc'
+];
+
+let logPollIntervals = {};
+
+function toggleLogTrace() {
+  const enabled = document.getElementById('logTraceToggle').checked;
+  const files = ['hp', 'stdout', 'stderr'];
+
+  files.forEach(type => {
+    const el = document.getElementById(type + 'Log');
+
+    if (enabled) {
+      logPollIntervals[type] = setInterval(() => {
+        fetch(`/admin/trace-log?file=${type}`, {
+          headers: { 'Authorization': getAuthHeader() }
+        })
+        .then(res => res.json())
+        .then(data => {
+          el.textContent = data.log;
+          el.scrollTop = el.scrollHeight;
+        })
+        .catch(() => {
+          el.textContent = '[Failed to fetch logs]';
+        });
+      }, 1500);
+    } else {
+      clearInterval(logPollIntervals[type]);
+    }
+  });
+}
+
+function addUnlField(value = '') {
+  const container = document.getElementById('unlList');
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <input type="text" value="${value}" />
+    <button class="deletebutton" type="button" onclick="this.parentElement.remove()">Delete UNL</button>
+  `;
+  container.appendChild(div);
+}
+
+function addKnownPeerField(value = '') {
+  const container = document.getElementById('knownPeersList');
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <input type="text" value="${value}" />
+    <button class="deletebutton" type="button" onclick="this.parentElement.remove()">Delete Peer</button>
+  `;
+  container.appendChild(div);
+}
+function updateHotPocketButtons() {
+  fetch('/admin/hotpocket-status', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const isRunning = data.running;
+
+    document.querySelectorAll('#hpinfoForm button').forEach(btn => {
+      if (
+        btn.textContent.includes('Import A Keypair')
+      ) {
+        btn.disabled = isRunning;
+        btn.style.opacity = isRunning ? 0.6 : 1;
+        btn.style.cursor = isRunning ? 'not-allowed' : 'pointer';
+      }
+    });
+
+    console.log('[HotPocket Status] Running:', isRunning);
+  })
+  .catch(err => {
+    console.error('Failed to check HotPocket status:', err);
+  });
+}
+
+function loadHPInfo() {
+   updateHotPocketButtons();
+  fetch('/admin/hpinfo', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const form = document.getElementById('hpinfoForm');
+    form.public_key.value = data.public_key;
+    form.contract_id.value = data.contract_id;
+    document.getElementById('unlList').innerHTML = '';
+(data.unl || []).forEach(unl => addUnlField(unl));
+
+document.getElementById('knownPeersList').innerHTML = '';
+(data.known_peers || []).forEach(peer => addKnownPeerField(peer));
+    form.user_port.value = data.user_port;
+    const domain = window.location.hostname;
+form.mesh_port.value = data.mesh_port;
+document.getElementById('mesh_port_label').value = `${window.location.hostname}:${data.mesh_port}`;
+    form.roundtime.value = data.roundtime;
+    form.stage_slice.value = data.stage_slice;
+    form.threshold.value = data.threshold;
+  });
+}
+
+document.getElementById('hpinfoForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const form = e.target;
+
+  const updated = {
+    public_key: form.public_key.value,
+    contract_id: form.contract_id.value,
+    unl: Array.from(document.querySelectorAll('#unlList input'))
+          .map(input => input.value.trim())
+          .filter(val => val),
+
+known_peers: Array.from(document.querySelectorAll('#knownPeersList input'))
+          .map(input => input.value.trim())
+          .filter(val => val),
+    user_port: parseInt(form.user_port.value),
+    mesh_port: parseInt(form.mesh_port.value),
+    roundtime: parseInt(form.roundtime.value),
+    stage_slice: parseInt(form.stage_slice.value),
+    threshold: parseInt(form.threshold.value),
+  };
+
+  fetch('/admin/hpinfo', {
+    method: 'POST',
+    headers: {
+      'Authorization': getAuthHeader(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updated)
+  })
+  .then(res => res.json())
+  .then(response => {
+    document.getElementById('hpinfoStatus').textContent = response.success
+      ? 'Configuration updated successfully.'
+      : 'Update failed.';
+  });
+ 
+});
+
+function loadClusterFiles() {
+  fetch('/admin/browse-cluster', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Unauthorized');
+      return res.json();
+    })
+    .then(async tree => {
+      const filePaths = [];
+      collectClusterFilePaths(tree, '', filePaths);
+      const checksums = await fetch('/admin/cluster-checksums', {
+        method: 'POST',
+        headers: {
+          'Authorization': getAuthHeader(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ files: filePaths })
+      })
+      .then(res => res.json())
+      .catch(() => ({})); 
+
+      const container = document.getElementById('clusterTree');
+      container.innerHTML = '';
+      const rootEl = renderClusterTree(tree, '', checksums);
+      container.appendChild(rootEl);
+    })
+    .catch(err => {
+      document.getElementById('clusterTree').textContent = 'Failed to load cluster files. Check login.';
+    });
+}
+
+function collectClusterFilePaths(tree, path, list) {
+  for (const key in tree) {
+    const fullPath = path ? `${path}/${key}` : key;
+    if (tree[key] === null) {
+      list.push(fullPath);
+    } else {
+      collectClusterFilePaths(tree[key], fullPath, list);
+    }
+  }
+}
+
+function renderClusterTree(tree, path, checksums = {}) {
+  const ul = document.createElement('ul');
+
+  for (const key in tree) {
+    const fullPath = path ? `${path}/${key}` : key;
+    const id = 'cluster_' + btoa(fullPath).replace(/=/g, '');
+    const li = document.createElement('li');
+
+    if (tree[key] === null) {
+      // File
+      const span = document.createElement('span');
+      span.textContent = key;
+      span.style.color = 'blue';
+      span.style.cursor = 'pointer';
+      span.onclick = () => viewClusterFile(fullPath);
+
+      const checksumText = checksums[fullPath] || 'Unavailable';
+      const checksumDiv = document.createElement('div');
+      checksumDiv.style.fontSize = '8px';
+      checksumDiv.style.color = '#666';
+      checksumDiv.style.marginLeft = '1rem';
+      checksumDiv.textContent = 'SHA-256: ' + checksumText;
+
+      li.appendChild(span);
+      li.appendChild(checksumDiv);
+    } else {
+      const toggle = document.createElement('span');
+      toggle.textContent = '[+]';
+      toggle.style.cursor = 'pointer';
+      toggle.onclick = () => toggleFolder(id);
+
+      const label = document.createElement('strong');
+      label.textContent = key;
+      label.style.marginLeft = '0.3rem';
+
+      const nestedDiv = document.createElement('div');
+      nestedDiv.id = id;
+      nestedDiv.style.display = 'none';
+      nestedDiv.style.marginLeft = '1rem';
+
+      const childUl = renderClusterTree(tree[key], fullPath, checksums);
+      nestedDiv.appendChild(childUl);
+
+      li.appendChild(toggle);
+      li.appendChild(label);
+      li.appendChild(nestedDiv);
+    }
+
+    ul.appendChild(li);
+  }
+
+  return ul;
+}
+
+function toggleFolder(id) {
+  const folder = document.getElementById(id);
+  const toggleBtn = folder.previousElementSibling.previousElementSibling;
+
+  if (folder.style.display === 'none') {
+    folder.style.display = 'block';
+    toggleBtn.textContent = '[-]';
+  } else {
+    folder.style.display = 'none';
+    toggleBtn.textContent = '[+]';
+  }
+}
+
+function viewhpinfo() {
+  fetch('/admin/hpinfo', {
+    method: 'GET',
+    headers: {
+      'Authorization': getAuthHeader(),
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log('Config:', data);
+  });
+}
+
+function updatehpinfo(updatedValues) {
+  fetch('/admin/hpinfo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthHeader(),
+    },
+    body: JSON.stringify(updatedValues),
+  })
+  .then(res => res.json())
+  .then(response => {
+    if (response.success) {
+      alert('Config updated');
+    }
+  });
+}
+
+function viewClusterFile(filePath) {
+  const auth = getAuthHeader();
+  const fileView = document.getElementById('clusterFileView');
+
+  fileView.innerHTML = `
+    <p><strong>Selected:</strong> ${filePath}</p>
+    <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+      <button onclick="downloadClusterFile('${filePath}')">Download</button>
+    </div>
+    <pre id="fileContent" style="white-space:pre-wrap;margin-bottom:0.5rem;max-height:500px;overflow-y:scroll;background:#f3f4f6;padding:1rem;border-radius:0.5rem;"></pre>
+    <div id="fileChecksum" style="font-size: 0.85rem; color: #555;"></div>
+  `;
+
+  fetch('/admin/read-cluster?path=' + encodeURIComponent(filePath), {
+    headers: { 'Authorization': auth }
+  })
+    .then(res => {
+      if (res.status === 415) {
+        return Promise.reject(new Error('This file cannot be previewed (non-text)'));
+      }
+      if (!res.ok) {
+        return res.text().then(msg => {
+          throw new Error(`Server returned ${res.status}: ${msg}`);
+        });
+      }
+      return res.text();
+    })
+    .then(text => {
+      document.getElementById('fileContent').textContent = text;
+    })
+    .catch(err => {
+      document.getElementById('fileContent').textContent = 'Error: ' + err.message;
+    });
+
+  fetch('/admin/cluster-checksum?path=' + encodeURIComponent(filePath), {
+    headers: { 'Authorization': auth }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const checksum = data.checksum || 'Unavailable';
+      document.getElementById('fileChecksum').innerHTML = `<strong>SHA-256:</strong> ${checksum}`;
+    })
+    .catch(err => {
+      document.getElementById('fileChecksum').textContent = 'SHA-256: Error fetching checksum';
+    });
+}
+
+function downloadClusterFile(filePath) {
+  const auth = getAuthHeader();
+  fetch('/admin/download-cluster?path=' + encodeURIComponent(filePath), {
+    headers: { 'Authorization': auth }
+  })
+    .then(response => {
+      if (!response.ok) throw new Error('Download failed: ' + response.status);
+      return response.blob();
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filePath.split('/').pop();
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch(err => {
+      alert("Download failed: " + err.message);
+    });
+}
+
+function showTab(tabId) {
+  document.getElementById('loginTab').style.display = 'none';
+  document.getElementById('managerTab').style.display = 'none';
+  document.getElementById('clusterTab').style.display = 'none';
+  document.getElementById('clustersettingsTab').style.display = 'none';
+  document.getElementById('clusteroperationsTab').style.display = 'none';
+  document.getElementById('morefunctionsTab').style.display = 'none';
+  document.getElementById('nodejsTab').style.display = 'none';
+  document.getElementById('usersTab').style.display = 'none';
+  document.getElementById('sidedishTab').style.display = 'none';
+  document.getElementById('apiTab').style.display = 'none';
+  document.getElementById('privatevariablesTab').style.display = 'none';
+  document.getElementById(tabId).style.display = 'block';
+
+  document.querySelectorAll('.tab-nav button').forEach(btn => btn.classList.remove('active'));
+const activeButton = document.querySelector(`.tab-nav button[data-tab="${tabId}"]`);
+if (activeButton) activeButton.classList.add('active');
+}
+
+function disableButtonTemporarily(button, callback) {
+      button.disabled = true;
+      button.style.opacity = 0.6;
+      button.style.cursor = 'not-allowed';
+      callback().finally(() => {
+        button.disabled = false;
+        button.style.opacity = 1;
+        button.style.cursor = 'pointer';
+      });
+    }
+
+    function getAuthHeader() {
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+  return 'Basic ' + btoa(user + ':' + pass);
+}
+
+async function checkVersions() {
+  const [versionsRes, voteRes] = await Promise.all([
+    fetch('/admin/list-versions', {
+      headers: { 'Authorization': getAuthHeader() }
+    }),
+    fetch('/admin/my-vote', {
+      headers: { 'Authorization': getAuthHeader() }
+    })
+  ]);
+
+  const versions = await versionsRes.json();
+  const vote = await voteRes.json();
+  const votedVersion = vote.version;
+
+  const container = document.getElementById('versionList');
+
+  if (!Array.isArray(versions) || versions.length === 0) {
+    container.innerHTML = '<em>No versions found.</em>';
+    return;
+  }
+
+container.innerHTML = versions.map(v => `
+  <div class="file-item" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <strong>${v.name}</strong><br/>
+      <small>Votes: ${v.votes} ${v.votedByMe ? '(you voted)' : ''}</small><br/>
+      <small>Delete votes: ${v.deleteVotes} ${v.deleteVotedByMe ? '(you voted)' : ''}</small>
+      <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="disableButtonTemporarily(this, () => fetchVersionFiles('${v.name}'))">Fetch to local</button>
+    </div>
+    <div style="display:flex; flex-directionolumn; align-items:flex-end;">
+      ${
+        v.votedByMe
+          ? '<span style="color:green;">✅ Already live vote</span>'
+          : `<button onclick="disableButtonTemporarily(this, () => promoteVersion('${v.name}'))">Go Live</button>`
+      }
+      ${
+        v.isLive
+          ? '<small style="color:#999;">Live version (cannot delete)</small>'
+          : `<label class="switch">
+               <input type="checkbox" onchange="toggleDeleteVote('${v.name}', this.checked)" ${v.deleteVotedByMe ? 'checked' : ''}>
+               <span class="slider"></span>
+             </label>`
+      }
+    </div>
+  </div>
+`).join('');
+
+}
+
+async function checkApiVersions() {
+  const container = document.getElementById('apiVersionList');
+  container.innerHTML = 'Loading...';
+
+  try {
+    const res = await fetch('/admin/list-api-versions', {
+      headers: { 'Authorization': getAuthHeader() }
+    });
+
+    const versions = await res.json();
+
+    if (!Array.isArray(versions) || versions.length === 0) {
+      container.innerHTML = '<em>No API versions found.</em>';
+      return;
+    }
+
+container.innerHTML = versions.map(v => `
+  <div class="file-item" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <strong>${v.name}</strong> ${v.isLive ? '<span style="color:green;">(LIVE)</span>' : ''}<br/>
+      <small>Votes: ${v.votes} ${v.votedByMe ? '(you voted)' : ''}</small><br/>
+      <small>Delete votes: ${v.deleteVotes} ${v.deleteVotedByMe ? '(you voted)' : ''}</small><br/>
+      <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="fetchApiVersion('${v.name}')">Fetch to local</button>
+    </div>
+    <div style="display:flex; flex-directionolumn; align-items:flex-end; gap:4px;">
+      ${
+        v.votedByMe
+          ? '<span style="color:green;">✅ Already voted</span>'
+          : `<button onclick="disableButtonTemporarily(this, () => promoteApiVersion('${v.name}'))">Go Live</button>`
+      }
+      ${
+        v.isLive
+          ? '<small style="color:#999;">Live version (cannot delete)</small>'
+          : `<label class="switch">
+               <input type="checkbox" onchange="deleteVoteApiVersion('${v.name}', this.checked)" ${v.deleteVotedByMe ? 'checked' : ''}>
+               <span class="slider"></span>
+             </label>`
+      }
+    </div>
+  </div>
+`).join('');
+
+  } catch (err) {
+    container.innerHTML = 'Failed to load API versions: ' + err.message;
+  }
+}
+
+async function checkMoreFunctionVersions() {
+  const container = document.getElementById('moreVersionList');
+  container.innerHTML = 'Loading...';
+
+  try {
+    const res = await fetch('/admin/list-morefunctions', {
+      headers: { 'Authorization': getAuthHeader() }
+    });
+
+    const versions = await res.json();
+
+    if (!Array.isArray(versions) || versions.length === 0) {
+      container.innerHTML = '<em>No MoreFunction versions found.</em>';
+      return;
+    }
+
+    container.innerHTML = versions.map(v => `
+      <div class="file-item" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong>${v.name}</strong> ${v.isLive ? '<span style="color:green;">(LIVE)</span>' : ''}<br/>
+          <small>Votes: ${v.votes} ${v.votedByMe ? '(you voted)' : ''}</small><br/>
+          <small>Delete votes: ${v.deleteVotes} ${v.deleteVotedByMe ? '(you voted)' : ''}</small><br/>
+          <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="fetchMoreFunctionVersion('${v.name}')">Fetch to local</button>
+        </div>
+        <div style="display:flex; flex-directionolumn; align-items:flex-end; gap:4px;">
+          ${
+            v.votedByMe
+              ? '<span style="color:green;">✅ Already voted</span>'
+              : `<button onclick="disableButtonTemporarily(this, () => promoteMoreFunctionVersion('${v.name}'))">Go Live</button>`
+          }
+          ${
+            v.isLive
+              ? '<small style="color:#999;">Live version (cannot delete)</small>'
+              : `<label class="switch">
+                   <input type="checkbox" onchange="deleteVoteMoreFunctionVersion('${v.name}', this.checked)" ${v.deleteVotedByMe ? 'checked' : ''}>
+                   <span class="slider"></span>
+                 </label>`
+          }
+        </div>
+      </div>
+    `).join('');
+
+  } catch (err) {
+    container.innerHTML = 'Failed to load MoreFunction versions: ' + err.message;
+  }
+}
+
+function promoteMoreFunctionVersion(name) {
+  fetch('/admin/morefunctions-promote', {
+    method: 'POST',
+    headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ version: name })
+  }).then(res => res.json()).then(data => {
+    alert(data.message || data.error || 'Done');
+    checkMoreFunctionVersions();
+  });
+}
+
+function deleteVoteMoreFunctionVersion(name, checked) {
+  fetch('/admin/morefunctions-deletevote', {
+    method: 'POST',
+    headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ version: name })
+  }).then(res => res.json()).then(data => {
+    console.log(data.message || data.error);
+    checkMoreFunctionVersions();
+  });
+}
+
+async function fetchVersionFiles(version) {
+  if (!confirm(`This will overwrite all current local files of same name with local files from version: ${version}. Proceed?`)) return;
+
+  try {
+    const res = await fetch('/admin/fetch-version', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    showMessage(data.message);
+  } catch (err) {
+    showMessage("Fetch failed: " + err.message);
+  }
+}
+
+async function fetchSidedishVersion(version) {
+  if (!confirm(`This will overwrite your current local sidedish.js with the version: ${version}. Proceed?`)) return;
+
+  try {
+    const res = await fetch('/admin/fetch-sidedish', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    showMessage(data.message);
+  } catch (err) {
+    showMessage("Fetch failed: " + err.message);
+  }
+}
+
+window.fetchApiVersion = async function(version) {
+  if (!confirm(`This will overwrite your current local api file with the version: ${version}. Proceed?`)) return;
+
+  try {
+    const res = await fetch('/admin/fetch-api', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    showMessage(data.message);
+  } catch (err) {
+    showMessage("Fetch failed: " + err.message);
+  }
+};
+
+
+
+async function toggleDeleteVote(version) {
+  try {
+    const res = await fetch('/admin/vote-delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthHeader()
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    showMessage(data.message);
+    checkVersions(); 
+  } catch (err) {
+    showMessage("Failed to update delete vote: " + err.message);
+  }
+}
+
+async function deleteVoteApiVersion(version) {
+  try {
+    const res = await fetch('/admin/vote-delete-api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthHeader()
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    apivMessage(data.message);
+  } catch (err) {
+    apivMessage("Failed to update delete vote: " + err.message);
+  }
+}
+
+async function promoteApiVersion(version) {
+  if (!confirm(`Vote to activate api version: ${version}?`)) return;
+
+  try {
+    const res = await fetch('/admin/promote-api', {
+      method: 'POST',
+      headers: {
+        'Authorization': getAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ version })
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error || 'Unknown result');
+    checkApiVersions(); 
+  } catch (err) {
+    alert('Vote failed: ' + err.message);
+  }
+}
+
+
+async function promoteVersion(version) {
+  const res = await fetch('/admin/promote-version', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthHeader()
+    },
+    body: JSON.stringify({ version })
+  });
+
+  const data = await res.json();
+  alert(data.message || data.error);
+}
+
+let syncEventSource = null;
+
+function startSyncProgressStream() {
+  if (syncEventSource) syncEventSource.close();
+
+  syncEventSource = new EventSource('/admin/sync-progress');
+  syncEventSource.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    showMessage(data.message);
+  };
+}
+
+async function pushLocalFilesToCluster() {
+  startSyncProgressStream();
+  try {
+    const res = await fetch('/admin/sync-to-cluster', {
+      method: 'POST',
+      headers: { 'Authorization': getAuthHeader() },
+      credentials: 'include'
+    });
+
+    const data = await res.json();
+    showMessage(data.message || "Sync completed.");
+  } catch (err) {
+    showMessage("Sync failed: " + err.message);
+  }
+}
+
+    let selectedFolder = '';
+    const folderTree = document.getElementById('folderTree');
+    const fileList = document.getElementById('fileList');
+    const fileInput = document.getElementById('fileInput');
+    const selectedPathDisplay = document.getElementById('selectedPathDisplay');
+
+function showMessage(msg) {
+  const log = document.getElementById('message');
+  log.innerHTML += `<div>${escapeHtml(msg)}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+function showMessagesidedish(msg) {
+  const log = document.getElementById('sidedishUploadLog');
+  log.innerHTML += `<div>${escapeHtml(msg)}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+function fileMessage(msg) {
+  const log = document.getElementById('filemessage');
+  log.innerHTML += `<div>${escapeHtml(msg)}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+
+function apivMessage(msg) {
+  const log = document.getElementById('apivmessage');
+  log.innerHTML += `<div>${escapeHtml(msg)}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+
+function loadFolders() {
+  showTab('managerTab');
+  fetch('/admin/folders', {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => {
+
+    console.log('Response status:', res.status);
+
+    if (!res.ok) throw new Error('Unauthorized');
+    return res.json();
+  })
+  .then(data => {
+    document.querySelector('.grid').classList.remove('locked');
+    document.querySelector('.switch-block').classList.remove('locked');
+    folderTree.innerHTML = renderTree(data, '');
+    selectFolder('');
+    loadClusterSetting(); 
+  })
+  .catch(err => {
+    console.error('Error loading folders:', err);
+    showMessage('Login failed. Check credentials.');
+  });
+}
+
+function createEmptyFile() {
+  const fileName = document.getElementById('newFolderName').value.trim();
+  if (!fileName) return showMessage('Enter a file name.');
+
+  const fullPath = selectedFolder ? `${selectedFolder}/${fileName}` : fileName;
+
+  fetch('/admin/file', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthHeader()
+    },
+    body: JSON.stringify({ path: fullPath, content: '' }),
+    credentials: 'include'
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessage(data.message);
+    loadFiles();
+    document.getElementById('newFolderName').value = '';
+  });
+}
+
+function renderTree(tree, path, depth = 0) {
+  let html = '<ul>';
+  if (depth === 0) {
+    html += `<li>
+      <span onclick="selectFolder('')">/ (root)</span>
+    </li>`;
+    html += renderTree(tree, '', 1); // Render root's children
+  } else {
+    for (const key in tree) {
+      const fullPath = path ? `${path}/${key}` : key;
+      html += `
+        <li>
+          <span onclick="selectFolder('${escapeHtml(fullPath)}')">${escapeHtml(key)}</span>
+          <span class="delete-folder" onclick="deleteFolderFromTree('${fullPath}')">❌</span>
+          ${renderTree(tree[key], fullPath, depth + 1)}
+        </li>`;
+    }
+  }
+  html += '</ul>';
+  return html;
+}
+
+function loadClusterSetting() {
+  fetch('/admin/settings', { headers: { 'Authorization': getAuthHeader() } })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('clusterToggle').checked = !!data.useCluster;
+    });
+}
+
+function saveClusterSetting() {
+  const useCluster = document.getElementById('clusterToggle').checked;
+  fetch('/admin/settings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthHeader()
+    },
+    body: JSON.stringify({ useCluster }),
+    credentials: 'include'
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessage(data.message);
+  });
+}
+
+function deleteFolderFromTree(folderPath) {
+  if (!confirm(`Are you sure you want to delete folder: ${folderPath}?`)) return;
+
+  fetch('/admin/delete-folder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthHeader()
+    },
+    body: JSON.stringify({ folder: folderPath }),
+    credentials: 'include'
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessage(data.message);
+    loadFolders();
+    fileList.innerHTML = '';
+    selectedPathDisplay.textContent = '(none)';
+  });
+}
+
+    function selectFolder(path) {
+      selectedFolder = path || '';
+      selectedPathDisplay.textContent = selectedFolder || '/';
+      fileList.innerHTML = '';
+      loadFiles();
+    }
+
+    function loadFiles() {
+  fetch('/admin/list-files?folder=' + encodeURIComponent(selectedFolder), {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => res.json())
+  .then(async data => {
+    const fileHtmls = await Promise.all(data.map(async file => {
+      if (file.type === 'folder') {
+        return `<div style="font-weight: bold; color: #f0a500; padding-left: 20px;padding-bottom:8px; position: relative;">
+  <span style="position: absolute; left: 0;">📁</span>
+  <em>${file.name}</em>
+</div>
+`;
+      }
+
+      const fullPath = selectedFolder ? `${selectedFolder}/${file.name}` : file.name;
+
+      try {
+        const res = await fetch('/admin/file-info?path=' + encodeURIComponent(fullPath), {
+          headers: { 'Authorization': getAuthHeader() }
+        });
+
+        const info = await res.json();
+        const ext = (info.extension || '').toLowerCase();
+        const isEditable =
+          editableMimeTypes.some(type => info.mimeType && info.mimeType.startsWith(type)) ||
+          editableExtensions.includes(ext);
+
+        const editButton = isEditable
+          ? `<button onclick="editFile('${file.name}')">Edit</button>`
+          : '';
+
+        const checksumRes = await fetch('/admin/checksum?path=' + encodeURIComponent(fullPath), {
+          headers: { 'Authorization': getAuthHeader() }
+        });
+
+        const checksumData = await checksumRes.json();
+        const checksum = checksumData.checksum || 'Error';
+
+        return `
+          <div class="file-item">
+            <span>${escapeHtml(file.name)}</span>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+              <div style="display: flex; gap: 0.5rem;">
+                ${editButton}
+                <button class="delete-btn" data-filename="${file.name}">Delete</button>
+              </div>
+              <div style="font-size: 0.75rem; color: #555; word-break: break-all;">
+                SHA-256: ${checksum}
+              </div>
+            </div>
+          </div>`;
+      } catch (err) {
+        return `
+          <div class="file-item">
+            <span>${escapeHtml(file.name)}</span>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="delete-btn" data-filename="${file.name}">Delete</button>
+            </div>
+          </div>`;
+      }
+    }));
+
+    fileList.innerHTML = fileHtmls.join('');
+
+  });
+}
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('delete-btn')) {
+    const btn = e.target;
+
+    
+    if (!btn.classList.contains('confirm-delete')) {
+      btn.classList.add('confirm-delete');
+      btn.textContent = 'Confirm';
+
+     
+      setTimeout(() => {
+        if (btn.classList.contains('confirm-delete')) {
+          btn.classList.remove('confirm-delete');
+          btn.textContent = 'Delete';
+        }
+      }, 4000); 
+
+    } else {
+      
+      const filename = btn.getAttribute('data-filename');
+      deleteFile(filename);
+    }
+  }
+});
+
+
+function editFile(filename) {
+  const fullPath = selectedFolder ? `${selectedFolder}/${filename}` : filename;
+  fetch('/admin/file?path=' + encodeURIComponent(fullPath), {
+    headers: { 'Authorization': getAuthHeader() }
+  })
+  .then(res => res.json())
+  .then(data => {
+fileList.innerHTML = `
+  <h4>Editing: ${escapeHtml(filename)}</h4>
+  <label>New File Name:</label>
+  <input type="text" id="editFileName" value="${filename}" />
+  <label>Content:</label>
+  <div class="editor-wrapper">
+  <pre class="highlight-layer" id="highlight-output"></pre>
+  <textarea id="editor" spellcheck="false"></textarea>
+</div>
+  <div style="margin-top:10px;">
+    <button onclick="saveFile('${fullPath}')">Save</button>
+    <button onclick="toggleFullScreenEditor()">Open editor in full screen</button>
+    <button onclick="cycleEditorSize(this)">Resize Editor</button>
+  </div>
+`;
+document.getElementById("editor").value = data.content;
+initEditor();
+  });
+}
+
+let editorSizeState = 'normal';
+
+function cycleEditorSize(buttonEl) {
+  const wrapper = document.querySelector(".editor-wrapper");
+  const wrappersection = document.querySelector(".editorsection");
+  const fileGrid = document.getElementById("fileandedit");
+  const treePanel = document.querySelector(".tree");
+
+  if (!wrapper || !fileGrid || !treePanel) return;
+
+
+  wrapper.style.height = '';
+  wrappersection.style.width = '';
+  fileGrid.style.display = '';
+  fileGrid.style.gridTemplateColumns = '';
+  treePanel.style.display = '';
+
+  if (editorSizeState === 'normal') {
+
+    fileGrid.style.display = 'flex';
+    fileGrid.style.flexDirection = 'row';
+    treePanel.style.display = 'none';
+    wrapper.style.height = '500px';
+    wrappersection.style.width = '100%';
+    editorSizeState = 'medium';
+    buttonEl.textContent = "Resize Editor (Large)";
+  } else if (editorSizeState === 'medium') {
+
+    fileGrid.style.display = 'flex';
+    fileGrid.style.flexDirection = 'row';
+    treePanel.style.display = 'none';
+    wrapper.style.height = '700px';
+    wrappersection.style.width = '100%';
+    editorSizeState = 'large';
+    buttonEl.textContent = "Resize Editor (Normal)";
+  } else {
+
+    fileGrid.style.display = 'grid';
+    fileGrid.style.gridTemplateColumns = '1fr 2fr';
+    treePanel.style.display = '';
+    wrapper.style.height = '';
+    wrappersection.style.width = '100%';
+    editorSizeState = 'normal';
+    buttonEl.textContent = "Resize Editor (Medium)";
+  }
+}
+
+
+
+
+
+function toggleFullScreenEditor() {
+  const wrapper = document.querySelector(".editor-wrapper");
+  if (!wrapper) return;
+
+  if (!document.fullscreenElement) {
+    wrapper.requestFullscreen().catch(err => {
+      alert(`Error attempting full screen: ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+
+function saveFile(originalPath) {
+  const newName = document.getElementById('editFileName').value.trim();
+  const content = document.getElementById('editor').value;
+
+  const originalDir = originalPath.substring(0, originalPath.lastIndexOf('/'));
+  const newPath = originalDir ? `${originalDir}/${newName}` : newName;
+
+  fetch('/admin/file', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthHeader()
+    },
+    body: JSON.stringify({ path: originalPath, newPath, content }),
+    credentials: 'include'
+  })
+  .then(res => res.json())
+  .then(data => {
+    fileMessage(data.message);
+    loadFiles();
+
+
+    const fileGrid = document.getElementById("fileandedit");
+    const treePanel = document.querySelector(".tree");
+    const wrapper = document.querySelector(".editor-wrapper");
+
+    if (fileGrid && treePanel && wrapper) {
+      fileGrid.style.display = 'grid';
+      fileGrid.style.gridTemplateColumns = '1fr 2fr';
+      treePanel.style.display = '';
+      wrapper.style.height = '';
+    }
+
+    editorSizeState = 'normal';
+    
+  });
+}
+
+function deleteFile(filename) {
+      fetch('/admin/delete-files', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': getAuthHeader()
+        },
+        body: JSON.stringify({ files: [selectedFolder + '/' + filename] }),
+        credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(data => {
+        fileMessage(data.message);
+        loadFiles();
+      });
+    }
+
+function deleteSelectedFolder() {
+      if (selectedFolder.trim() === '') {
+        fileMessage('Deleting root folder is not allowed');
+        return;
+      }
+      fetch('/admin/delete-folder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': getAuthHeader()
+        },
+        body: JSON.stringify({ folder: selectedFolder }),
+        credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(data => {
+        fileMessage(data.message);
+        loadFolders();
+        fileList.innerHTML = '';
+        selectedPathDisplay.textContent = '(none)';
+      });
+    }
+
+function createSubfolder() {
+      const folderName = document.getElementById('newFolderName').value;
+      if (!folderName.trim()) {
+        fileMessage('Enter a subfolder name.');
+        return;
+      }
+      fetch('/admin/create-folder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': getAuthHeader()
+        },
+        body: JSON.stringify({
+          base: selectedFolder,
+          folder: folderName
+        }),
+        credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(data => {
+        fileMessage(data.message);
+        loadFolders();
+      });
+    }
+
+async function uploadFiles() {
+  const files = droppedFiles || Array.from(fileInput.files);
+  if (files.length === 0) {
+    fileMessage('No files selected or dropped.');
+    return;
+  }
+
+  const chunkSize = 2 * 1024 * 1024; // 2MB
+
+  for (const file of files) {
+    const totalChunks = Math.ceil(file.size / chunkSize);
+    for (let i = 0; i < totalChunks; i++) {
+      const chunk = file.slice(i * chunkSize, (i + 1) * chunkSize);
+      const formData = new FormData();
+      formData.append('files', chunk);
+      formData.append('filename', file.name);
+      formData.append('chunkNo', i + 1);
+      formData.append('totalChunks', totalChunks);
+
+      try {
+        const res = await fetch('/admin/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': getAuthHeader(),
+            'x-upload-folder': encodeURIComponent(selectedFolder)
+          },
+          body: formData,
+          credentials: 'include'
+        });
+
+        if (!res.ok) {
+          const error = await res.text();
+          throw new Error(error || `Chunk ${i + 1} failed`);
+        }
+      } catch (err) {
+        fileMessage(`Upload failed for "${file.name}" (chunk ${i + 1}): ${err.message}`);
+        return;
+      }
+    }
+
+    fileMessage(`Upload complete: ${file.name}`);
+  }
+
+  droppedFiles = null;
+  fileInput.value = '';
+  loadFiles();
+}
+
+let droppedFiles = null;
+const dropzone = document.getElementById('dropzone');
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.style.backgroundColor = '#eef2ff';
+});
+dropzone.addEventListener('dragleave', () => {
+  dropzone.style.backgroundColor = '';
+});
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  droppedFiles = Array.from(e.dataTransfer.files);
+  dropzone.style.backgroundColor = '';
+  fileMessage(`${droppedFiles.length} file(s) dropped. Ready to upload.`);
+});
+
+
+
+
+function initEditor() {
+  const editor = document.getElementById('editor');
+  const highlightOutput = document.getElementById('highlight-output');
+
+  if (!editor || !highlightOutput) return;
+
+  function highlightHTML(code) {
+    const escape = code
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    return escape
+      .replace(/(&lt;\/?[a-z]+)(.*?)(\/?&gt;)/gi, (match, tag, attrs, close) => {
+        return `<span class="tag">${tag}</span><span class="attr">${attrs}</span><span class="tag">${close}</span>`;
+      })
+      .replace(/(&quot;[^&]*?&quot;)/g, '<span class="string">$1</span>');
+  }
+
+  editor.addEventListener('input', () => {
+    highlightOutput.innerHTML = highlightHTML(editor.value);
+  });
+
+  editor.addEventListener('scroll', () => {
+    highlightOutput.scrollTop = editor.scrollTop;
+    highlightOutput.scrollLeft = editor.scrollLeft;
+  });
+
+  // Optional: highlight initial content
+  highlightOutput.innerHTML = highlightHTML(editor.value);
+}
+  </script>
+
+</div>
+
+<footer style="text-align: center; margin-top: 3rem; color: #07112d; font-size: 0.9rem;">
+<p style="font-size:10px;">Decentralized Hosting at...</p>
+<div style="margin:auto;height:18.5px;width:133px">
+  <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 3030 421" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><use id="Background" xlink:href="#_Image1" x="0" y="0" width="727px" height="101px" transform="matrix(4.16667,0,0,4.16667,0,0)"/><defs><image id="_Image1" width="727px" height="101px" xlink:href="data:image/png;base64,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"/></defs></svg>
+</footer>
+
+</body>
+
+</html>

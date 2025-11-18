@@ -1,0 +1,31 @@
+{
+    "name": "evernode-webcbuilder",
+    "version": "1.0.0",
+    "description": "An Evernode Webcluster builder",
+    "main": "index.js",
+    "type": "commonjs",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "",
+    "funding": "https://xumm.app/detect/request:rsmYqAFi4hQtTY6k6S3KPJZh7axhUwxT31",
+    "license": "MIT",
+    "dependencies": {
+        "@vercel/ncc": "0.34.0",
+        "axios": "^1.9.0",
+        "basic-auth": "^2.0.1",
+        "body-parser": "^1.20.2",
+        "bson": "6.4.0",
+        "chokidar": "^3.5.3",
+        "cors": "^2.8.5",
+        "express": "^4.18.4",
+        "express-basic-auth": "^1.2.0",
+        "file-type": "^17.1.6",
+        "fs-extra": "^11.2.0",
+        "hotpocket-js-client": "",
+        "hotpocket-nodejs-contract": "^0.7.3",
+        "mime-types": "^2.1.35",
+        "express-rate-limit" : "",
+        "multer": ""
+    }
+}

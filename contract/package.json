@@ -1,0 +1,19 @@
+{
+    "name": "synccontract",
+    "version": "1.0.1",
+    "author": {
+        "name": "Mr See Me No More"
+    },
+    "funding": "https://xumm.app/detect/request:rsmYqAFi4hQtTY6k6S3KPJZh7axhUwxT31",
+    "scripts": {
+        "build": "npx ncc build contract.js -o dist",
+        "build:prod": "npx ncc build contract.js --minify -o dist",
+        "start": "npm run build && hpdevkit deploy dist"
+    },
+    "dependencies": {
+        "@vercel/ncc": "0.34.0",
+        "bson": "6.4.0",
+        "hotpocket-nodejs-contract": "^0.7.3",
+        "ncc": "^0.3.6"
+    }
+}
