@@ -300,11 +300,11 @@ button:hover {
   transition: 0.3s;
 }
 
-.switch inputhecked + .slider {
+.switch input:checked + .slider {
   background: var(--primary);
 }
 
-.switch inputhecked + .slider:before {
+.switch input:checked + .slider:before {
   transform: translateX(22px);
 }
 
@@ -1057,18 +1057,27 @@ Why You’re Safe: Open-source software like Everwebhost is used by millions bec
   <div id="loginTab">
   <div class="card" id="card" style="padding: 16px; border-radius: 8px; position: relative;">
     <h1 style="margin-top: 0;">Admin File Manager</h1>
-    <span style="font-size:12px;">Default: admin</span><br>
+    <!-- First-run setup (TJ / Electro⚡Nickels): shown only while no admin password is set -->
+    <div id="setupBox" style="display: none;">
+      <p style="margin: 0 0 8px;"><strong>Set up your admin password</strong></p>
+      <p style="font-size:13px; margin: 0 0 8px;">This copy has no password yet. Open your instance's Docker Logs in your Evernode panel, copy the one-time setup code, then pick a password of at least 12 characters.</p>
+      <input type="text" id="setupCode" placeholder="Setup code" autocomplete="off" style="width: 100%; margin-bottom: 8px;" />
+      <input type="password" id="setupPassword" placeholder="New password" autocomplete="new-password" style="width: 100%; margin-bottom: 8px;" />
+      <input type="password" id="setupPasswordConfirm" placeholder="Confirm new password" autocomplete="new-password" style="width: 100%; margin-bottom: 8px;" />
+      <button onclick="runFirstSetup();" style="width: 100%;">Set password</button>
+      <div id="setupMsg" style="font-size:13px; margin-top: 8px;"></div>
+    </div>
+    <div id="loginBox">
     <input type="text" id="username" placeholder="Username" style="width: 100%; margin-bottom: 8px;" />
-    <span style="font-size:12px;">Default: password</span>
     <input type="password" id="password" placeholder="Password" style="width: 100%; margin-bottom: 8px;" />
     <button onclick="loadFolders();" style="width: 100%;">Login & Load Folders</button>
+    </div>
 
     <!-- Info box -->
     <div style="position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 18px;" onclick="document.getElementById('infoPopup').style.display = (document.getElementById('infoPopup').style.display === 'block') ? 'none' : 'block';">❓</div>
     <div id="infoPopup" style="display: none; position: absolute; top: 32px; right: 8px; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-size: 12px; width: 200px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       <strong>Login Info:</strong><br>
-      Default username is <code>admin</code><br>
-      Default password is <code>password</code><br>
+      Username is <code>admin</code>. There is no default password: a new copy asks you to set one with its setup code.<br>
       You can change your credentials in the User Management Section.<br><br>
       The password is local, so you can't use it to log in on other peoples instances even thought they are in the same cluster.
     </div>
@@ -1983,14 +1992,14 @@ async function listSidedishVersions() {
       const deleteVoted = vote.deleteVotedByMe;
 
       return `
-        <div class="file-item" style="display:flex; justify-content:space-between; align-itemsenter;">
+        <div class="file-item" style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>${name}</strong> ${name === liveVersion ? '<span style="color:green;">(LIVE)</span>' : ''}<br/>
             <small>Votes: ${vote.votes || 0} ${voted ? '(you voted)' : ''}</small><br/>
             <small>Delete votes: ${vote.deleteVotes || 0} ${deleteVoted ? '(you voted)' : ''}</small><br/>
             <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="disableButtonTemporarily(this, () => fetchSidedishVersion('${name}'))">Fetch to local</button>
           </div>
-          <div style="display:flex; flex-directionolumn; align-items:flex-end; gap:4px;">
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
             ${
               voted
                 ? '<span style="color:green;">✅ Already voted</span>'
@@ -2732,7 +2741,7 @@ container.innerHTML = versions.map(v => `
       <small>Delete votes: ${v.deleteVotes} ${v.deleteVotedByMe ? '(you voted)' : ''}</small>
       <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="disableButtonTemporarily(this, () => fetchVersionFiles('${v.name}'))">Fetch to local</button>
     </div>
-    <div style="display:flex; flex-directionolumn; align-items:flex-end;">
+    <div style="display:flex; flex-direction:column; align-items:flex-end;">
       ${
         v.votedByMe
           ? '<span style="color:green;">✅ Already live vote</span>'
@@ -2776,7 +2785,7 @@ container.innerHTML = versions.map(v => `
       <small>Delete votes: ${v.deleteVotes} ${v.deleteVotedByMe ? '(you voted)' : ''}</small><br/>
       <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="fetchApiVersion('${v.name}')">Fetch to local</button>
     </div>
-    <div style="display:flex; flex-directionolumn; align-items:flex-end; gap:4px;">
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
       ${
         v.votedByMe
           ? '<span style="color:green;">✅ Already voted</span>'
@@ -2823,7 +2832,7 @@ async function checkMoreFunctionVersions() {
           <small>Delete votes: ${v.deleteVotes} ${v.deleteVotedByMe ? '(you voted)' : ''}</small><br/>
           <button style="margin-left:0px!important;padding:6px!important;font-size:12px;" onclick="fetchMoreFunctionVersion('${v.name}')">Fetch to local</button>
         </div>
-        <div style="display:flex; flex-directionolumn; align-items:flex-end; gap:4px;">
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
           ${
             v.votedByMe
               ? '<span style="color:green;">✅ Already voted</span>'
@@ -3068,6 +3077,46 @@ function apivMessage(msg) {
   log.innerHTML += `<div>${escapeHtml(msg)}</div>`;
   log.scrollTop = log.scrollHeight;
 }
+
+// First-run setup (TJ / Electro⚡Nickels)
+async function checkFirstSetup() {
+  try {
+    const r = await fetch('/admin/setup-status');
+    const d = await r.json();
+    document.getElementById('setupBox').style.display = d.needsSetup ? 'block' : 'none';
+    document.getElementById('loginBox').style.display = d.needsSetup ? 'none' : 'block';
+  } catch (e) { /* older server: keep the normal login */ }
+}
+
+async function runFirstSetup() {
+  const msg = document.getElementById('setupMsg');
+  const password = document.getElementById('setupPassword').value;
+  msg.textContent = 'Saving...';
+  try {
+    const r = await fetch('/admin/setup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code: document.getElementById('setupCode').value,
+        password,
+        passwordConfirm: document.getElementById('setupPasswordConfirm').value
+      })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) { msg.textContent = d.error || ('Setup failed (' + r.status + ').'); return; }
+    document.getElementById('setupPassword').value = '';
+    document.getElementById('setupPasswordConfirm').value = '';
+    document.getElementById('setupCode').value = '';
+    document.getElementById('username').value = 'admin';
+    document.getElementById('password').value = password;
+    document.getElementById('setupBox').style.display = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+    loadFolders();
+  } catch (e) {
+    msg.textContent = 'Could not reach the server.';
+  }
+}
+checkFirstSetup();
 
 function loadFolders() {
   showTab('managerTab');

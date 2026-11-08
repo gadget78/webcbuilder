@@ -39,7 +39,7 @@ COPY package-lock.json /home/everweb/package-lock.json
 COPY package.json /home/everweb/package.json
 COPY sidedish.js /home/everweb/sidedish.js
 COPY public /home/everweb/public
-COPY password.hash /home/everweb/password.hash
+COPY first-run-setup.js /home/everweb/first-run-setup.js
 COPY contract/dist/ /home/everweb/contract/
 COPY start.sh /start.sh
 COPY supervisord.conf /home/everweb/supervisord.conf
