@@ -17,6 +17,15 @@ This builder exist on the docker hub, you can deploy it with image everweb/webcb
 
 SSH user and password: everweb:default
 
+# First login (admin password)
+There is no default admin password. A new copy refuses every admin login until a password is set:
+1. Get the one-time setup code: open your instance's **Docker Logs** in your Evernode panel (evernode.app or the host panel). The code is printed there once, the first time the container starts, and saved in `setup-code.txt` next to `index.js`. The code works like a key: anyone who can read those logs or that file can set the password.
+2. Open `/admin/`, enter the code, and pick a password (12 characters or more).
+If Docker Logs say `[setup] Setup step failed`, admin stays locked (it never falls back to an open login). Use **Docker restart** in your panel to run the setup step again.
+3. While an admin password exists the code is refused. Passwords must be 12 characters or more, here and in User Management.
+
+Copies still on the old default password (`password`) go back to setup mode after updating.
+
 Remember to turn off ssh in supervisord.conf for your docker container!
 
 The idea with this project is that it constantly keeps getting improved, anyone is welcome to contribute and fork this, anyone is welcome to whitelabel and "steal" the code. The intention behind this builder is that YOU can use it in any (legal of course) way you wish.

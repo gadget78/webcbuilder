@@ -114,7 +114,14 @@ function loadUserCredentials() {
 
   return credentials;
 }
+// First-run setup (TJ / Electro⚡Nickels): no default password. Until one is
+// set, every admin login is refused and only /admin/setup works.
+const { createSetup, passwordProblem, sameOrigin } = require('./first-run-setup');
+const firstRun = createSetup({ dir: __dirname });
+firstRun.ensureCode(); // prints the one-time setup code to the log if needed
+
 function myAuthorizer(username, password) {
+  if (firstRun.needsSetup()) return false;
   const users = loadUserCredentials();
   const storedHash = users[username];
 
@@ -1451,6 +1458,9 @@ adminRouter.post('/add-user', adminRateLimiter, authMiddleware, async (req, res)
     return res.status(400).json({ error: 'User already exists.' });
   }
 
+  const weak = passwordProblem(password); // same rule as first-run setup
+  if (weak) return res.status(400).json({ error: weak });
+
   const hash = crypto.createHash('sha256').update(password).digest('hex');
   const entry = `${username}:${hash}\n`;
 let current = '';
@@ -1503,6 +1513,9 @@ adminRouter.post('/change-password', adminRateLimiter, authMiddleware, async (re
   if (newPassword !== newPasswordConfirm) {
     return res.status(400).json({ error: 'New passwords do not match.' });
   }
+
+  const weak = passwordProblem(newPassword); // same rule as first-run setup
+  if (weak) return res.status(400).json({ error: weak });
 
   const users = loadUserCredentials();
   const storedHash = users[username];
@@ -2078,6 +2091,18 @@ if (response.type === 'success' || response.type === 'info') {
     console.error('[go-live] failed:', err);
     res.status(500).json({ error: err.message });
   }
+});
+
+// First-run setup routes (TJ / Electro⚡Nickels). No login needed: the setup
+// code is the proof. Refused once a password exists.
+adminRouter.get('/setup-status', (req, res) => {
+  res.json({ needsSetup: firstRun.needsSetup() });
+});
+// adminRateLimiter already covers this route through the /admin mount below.
+adminRouter.post('/setup', (req, res) => {
+  if (!sameOrigin(req)) return res.status(403).json({ error: 'Setup must come from this page.' });
+  const r = firstRun.complete(req.body);
+  res.status(r.status).json(r.body);
 });
 
 app.use('/admin', adminRateLimiter, adminRouter);

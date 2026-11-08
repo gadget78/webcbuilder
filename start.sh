@@ -5,6 +5,10 @@ source /contract/env.vars
 
 chown -R everweb:everweb /home/everweb
 
+# First-run setup (TJ / Electro⚡Nickels): if no admin password is set, make a
+# one-time setup code and print it here, so it shows in the panel's Docker Logs.
+runuser -u everweb -- /usr/bin/node /home/everweb/first-run-setup.js || echo "[setup] Setup step failed. Admin stays locked (never opened). Use Docker restart in your panel to try again."
+
 CFG_FILE="/contract/cfg/hp.cfg"
 HTML_FILE="/home/everweb/index.js"
 
